@@ -1,9 +1,11 @@
+import Hero from "./components/Hero";
+
 const App = () => {
-  return (
-    <main>
-      <h1 className="font-bold text-5xl">Award winning web design</h1>
-    </main>
-  )
+	return (
+		<main className="relative w-screen min-h-screen overflow-x-hidden">
+			<Hero />
+		</main>
+	);
 };
 
 export default App;
