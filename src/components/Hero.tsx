@@ -59,7 +59,6 @@ export default function Hero() {
 				// Hide button video
 				gsap.set(buttonVideoRef.current, {
 					visibility: "hidden",
-					opacity: 0,
 				});
 
 				// Expand next background video
@@ -108,9 +107,9 @@ export default function Hero() {
 							buttonVideoRef.current.src = getVideoSrc(nextIndex);
 						}
 
+						// Show button video
 						gsap.set(buttonVideoRef.current, {
 							visibility: "visible",
-							opacity: 1,
 						});
 					},
 				});
