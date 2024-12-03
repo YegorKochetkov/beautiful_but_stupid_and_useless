@@ -5,8 +5,24 @@ import { TiLocationArrow } from "react-icons/ti";
 
 import Button from "./Button";
 
+const ANIMATION_CONFIG = {
+	DURATION: {
+		EXPAND: 0.5,
+		BUTTON: 1,
+	},
+	DELAY: {
+		BACKGROUND: 1,
+		BUTTON: 1,
+		INDEX_UPDATE: 1.5,
+	},
+	SIZE: {
+		MINI: "16rem",
+		FULL: "100%",
+	},
+} as const;
+
 export default function Hero() {
-	const heroVideosNumber = [1, 2, 3, 4];
+	const heroVideosNumber = [1, 2, 3, 4] as const;
 	const totalHeroVideos = heroVideosNumber.length;
 
 	const nextBackgroundVideoId = "#next-background-video";
@@ -17,8 +33,19 @@ export default function Hero() {
 	const buttonVideoRef = React.useRef<HTMLVideoElement>(null);
 	const nextBackgroundVideoRef = React.useRef<HTMLVideoElement>(null);
 	const currentBackgroundVideoRef = React.useRef<HTMLVideoElement>(null);
+	const videoFrame = React.useRef<HTMLDivElement>(null);
 
-	const videoFrame = React.useRef(null);
+	const getVideoSrc = React.useCallback(
+		(index: number) => `/videos/hero-${index}.mp4`,
+		[]
+	);
+
+	const handleCurrentVideoLoaded = React.useCallback(() => {
+		if (nextBackgroundVideoRef.current && currentBackgroundVideoRef.current) {
+			currentBackgroundVideoRef.current.currentTime =
+				nextBackgroundVideoRef.current.currentTime;
+		}
+	}, []);
 
 	useGSAP(
 		(_context, contextSafe) => {
@@ -29,22 +56,24 @@ export default function Hero() {
 					nextBackgroundVideoRef.current.currentTime = 0;
 				}
 
+				// Hide button video
 				gsap.set(buttonVideoRef.current, {
 					visibility: "hidden",
-					opacity: "0",
+					opacity: 0,
 				});
 
+				// Expand next background video
 				gsap.fromTo(
 					nextBackgroundVideoId,
 					{
-						opacity: "1",
-						zIndex: "20",
+						opacity: 1,
+						zIndex: 20,
 					},
 					{
-						duration: 0.5,
+						duration: ANIMATION_CONFIG.DURATION.EXPAND,
 						ease: "power1.inOut",
-						width: "100%",
-						height: "100%",
+						width: ANIMATION_CONFIG.SIZE.FULL,
+						height: ANIMATION_CONFIG.SIZE.FULL,
 
 						onComplete: () => {
 							if (
@@ -62,76 +91,64 @@ export default function Hero() {
 					}
 				);
 
+				// Reset next background video
 				gsap.to(nextBackgroundVideoId, {
-					delay: 1,
+					delay: ANIMATION_CONFIG.DELAY.BACKGROUND,
 					duration: 0,
-					width: "16rem",
-					height: "16rem",
-					opacity: "0",
-					zIndex: "0",
+					width: ANIMATION_CONFIG.SIZE.MINI,
+					height: ANIMATION_CONFIG.SIZE.MINI,
+					opacity: 0,
+					zIndex: 0,
 
 					onComplete: () => {
-						if (nextBackgroundVideoRef.current) {
-							nextBackgroundVideoRef.current.src = getVideoSrc(
-								heroVideosNumber[(videoIndex.current + 2) % totalHeroVideos]
-							);
-						}
-
-						if (buttonVideoRef.current) {
-							buttonVideoRef.current.src = getVideoSrc(
-								heroVideosNumber[(videoIndex.current + 2) % totalHeroVideos]
-							);
+						if (nextBackgroundVideoRef.current && buttonVideoRef.current) {
+							const nextIndex =
+								heroVideosNumber[(videoIndex.current + 2) % totalHeroVideos];
+							nextBackgroundVideoRef.current.src = getVideoSrc(nextIndex);
+							buttonVideoRef.current.src = getVideoSrc(nextIndex);
 						}
 
 						gsap.set(buttonVideoRef.current, {
 							visibility: "visible",
-							opacity: "1",
+							opacity: 1,
 						});
 					},
 				});
 
+				// Animate button video
 				gsap.fromTo(
 					buttonVideoId,
 					{
-						width: "0",
-						height: "0",
+						width: 0,
+						height: 0,
 					},
 					{
-						delay: 1,
-						duration: 1,
+						delay: ANIMATION_CONFIG.DELAY.BUTTON,
+						duration: ANIMATION_CONFIG.DURATION.BUTTON,
 						ease: "power1.inOut",
-						width: "16rem",
-						height: "16rem",
+						width: ANIMATION_CONFIG.SIZE.MINI,
+						height: ANIMATION_CONFIG.SIZE.MINI,
 					}
 				);
 
-				gsap.delayedCall(1.5, () => {
+				// Update video index
+				gsap.delayedCall(ANIMATION_CONFIG.DELAY.INDEX_UPDATE, () => {
 					videoIndex.current = (videoIndex.current + 1) % totalHeroVideos;
 				});
 			});
 
-			buttonVideoRef.current?.addEventListener("click", handleHeroMiniVideoClick);
+			const buttonVideo = buttonVideoRef.current;
+			buttonVideo?.addEventListener("click", handleHeroMiniVideoClick);
 
 			return () => {
-				buttonVideoRef.current?.removeEventListener(
-					"click",
-					handleHeroMiniVideoClick
-				);
+				buttonVideo?.removeEventListener("click", handleHeroMiniVideoClick);
 			};
 		},
-		{ scope: videoFrame, dependencies: [videoIndex.current] }
-	);
-
-	const getVideoSrc = (index: number) => `/videos/hero-${index}.mp4`;
-
-	const handleCurrentVideoLoaded = () => {
-		if (nextBackgroundVideoRef.current && currentBackgroundVideoRef.current) {
-			currentBackgroundVideoRef.current.currentTime =
-				nextBackgroundVideoRef.current.currentTime;
+		{
+			scope: videoFrame,
+			dependencies: [videoIndex.current, getVideoSrc, totalHeroVideos],
 		}
-	};
-
-	const handleNextVideoLoaded = () => {};
+	);
 
 	return (
 		<div className="relative w-screen h-dvh overflow-x-hidden">
@@ -163,7 +180,6 @@ export default function Hero() {
 							heroVideosNumber[(videoIndex.current + 1) % totalHeroVideos]
 						)}
 						className="z-20 absolute opacity-0 object-center object-cover size-64"
-						onLoadedData={handleNextVideoLoaded}
 						ref={nextBackgroundVideoRef}
 						autoPlay
 					/>
@@ -191,12 +207,10 @@ export default function Hero() {
 interface VideoProps extends React.VideoHTMLAttributes<HTMLVideoElement> {
 	src: string;
 	className: string;
-	handleVideoLoaded?: () => void;
-	isButton?: boolean;
 }
 
 const VideoElement = React.forwardRef<HTMLVideoElement, VideoProps>(
-	({ src, className, handleVideoLoaded, ...props }: VideoProps, ref) => {
+	({ src, className, ...props }: VideoProps, ref) => {
 		return (
 			<video
 				width={320}
@@ -207,7 +221,6 @@ const VideoElement = React.forwardRef<HTMLVideoElement, VideoProps>(
 				ref={ref}
 				aria-label="short clips of gameplay of random computer games"
 				className={className}
-				onLoadedMetadata={handleVideoLoaded}
 				tabIndex={-1}
 				{...props}
 			/>
