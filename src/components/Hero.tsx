@@ -7,13 +7,15 @@ import Button from "./Button";
 
 const ANIMATION_CONFIG = {
 	DURATION: {
-		EXPAND: 0.5,
-		BUTTON: 1,
+		BACKGROUND_EXPAND: 0.5,
+		BACKGROUND_RESET: 0,
+		BUTTON_EXPAND: 1.5,
 	},
 	DELAY: {
-		BACKGROUND: 1,
+		BACKGROUND_RESET_OPACITY: 1,
+		BACKGROUND_RESET_SIZE: 1,
 		BUTTON: 1,
-		INDEX_UPDATE: 1.5,
+		INDEX_UPDATE: 1.75,
 	},
 	SIZE: {
 		MINI: "16rem",
@@ -27,10 +29,10 @@ export default function Hero() {
 
 	const nextBackgroundVideoId = "#next-background-video";
 	const currentBackgroundVideoId = "#current-background-video";
-	const buttonVideoId = "#button-video";
+	const swapButtonVideoId = "#swap-button-video";
 
 	const videoIndex = React.useRef(0);
-	const buttonVideoRef = React.useRef<HTMLVideoElement>(null);
+	const swapButtonVideoRef = React.useRef<HTMLVideoElement>(null);
 	const nextBackgroundVideoRef = React.useRef<HTMLVideoElement>(null);
 	const currentBackgroundVideoRef = React.useRef<HTMLVideoElement>(null);
 	const videoFrame = React.useRef<HTMLDivElement>(null);
@@ -52,12 +54,13 @@ export default function Hero() {
 			if (!contextSafe) return;
 
 			const handleHeroMiniVideoClick = contextSafe(() => {
+				// Start video playback from the beginning on expanding
 				if (nextBackgroundVideoRef.current) {
 					nextBackgroundVideoRef.current.currentTime = 0;
 				}
 
-				// Hide button video
-				gsap.set(buttonVideoRef.current, {
+				// Hide swap button video
+				gsap.set(swapButtonVideoRef.current, {
 					visibility: "hidden",
 				});
 
@@ -69,7 +72,7 @@ export default function Hero() {
 						zIndex: 20,
 					},
 					{
-						duration: ANIMATION_CONFIG.DURATION.EXPAND,
+						duration: ANIMATION_CONFIG.DURATION.BACKGROUND_EXPAND,
 						ease: "power1.inOut",
 						width: ANIMATION_CONFIG.SIZE.FULL,
 						height: ANIMATION_CONFIG.SIZE.FULL,
@@ -83,6 +86,7 @@ export default function Hero() {
 									heroVideosNumber[(videoIndex.current + 1) % totalHeroVideos]
 								);
 
+								// Start video playback from the same point for expanded and current background video
 								currentBackgroundVideoRef.current.currentTime =
 									nextBackgroundVideoRef.current.currentTime;
 							}
@@ -90,43 +94,55 @@ export default function Hero() {
 					}
 				);
 
-				// Reset next background video
+				// Reset next background video phase 1
 				gsap.to(nextBackgroundVideoId, {
-					delay: ANIMATION_CONFIG.DELAY.BACKGROUND,
-					duration: 0,
-					width: ANIMATION_CONFIG.SIZE.MINI,
-					height: ANIMATION_CONFIG.SIZE.MINI,
+					delay: ANIMATION_CONFIG.DELAY.BACKGROUND_RESET_OPACITY,
 					opacity: 0,
-					zIndex: 0,
 
 					onComplete: () => {
-						if (nextBackgroundVideoRef.current && buttonVideoRef.current) {
+						if (nextBackgroundVideoRef.current && swapButtonVideoRef.current) {
 							const nextIndex =
 								heroVideosNumber[(videoIndex.current + 2) % totalHeroVideos];
-							nextBackgroundVideoRef.current.src = getVideoSrc(nextIndex);
-							buttonVideoRef.current.src = getVideoSrc(nextIndex);
-						}
 
+							// Set next background video
+							nextBackgroundVideoRef.current.src = getVideoSrc(nextIndex);
+							swapButtonVideoRef.current.src = getVideoSrc(nextIndex);
+						}
+					},
+				});
+
+				// Reset next background video phase 2
+				gsap.to(nextBackgroundVideoId, {
+					zIndex: -20,
+					delay: ANIMATION_CONFIG.DELAY.BACKGROUND_RESET_SIZE,
+					duration: ANIMATION_CONFIG.DURATION.BACKGROUND_RESET,
+					width: ANIMATION_CONFIG.SIZE.MINI,
+					height: ANIMATION_CONFIG.SIZE.MINI,
+
+					onComplete: () => {
 						// Show button video
-						gsap.set(buttonVideoRef.current, {
+						gsap.set(swapButtonVideoRef.current, {
 							visibility: "visible",
 						});
 					},
 				});
 
-				// Animate button video
+				// Animate button video appearance
 				gsap.fromTo(
-					buttonVideoId,
+					swapButtonVideoRef.current,
 					{
-						width: 0,
-						height: 0,
+						opacity: 0,
+						scale: 0.25,
+						zIndex: 50,
 					},
 					{
 						delay: ANIMATION_CONFIG.DELAY.BUTTON,
-						duration: ANIMATION_CONFIG.DURATION.BUTTON,
+						duration: ANIMATION_CONFIG.DURATION.BUTTON_EXPAND,
 						ease: "power1.inOut",
 						width: ANIMATION_CONFIG.SIZE.MINI,
 						height: ANIMATION_CONFIG.SIZE.MINI,
+						opacity: 1,
+						scale: 1,
 					}
 				);
 
@@ -136,7 +152,7 @@ export default function Hero() {
 				});
 			});
 
-			const buttonVideo = buttonVideoRef.current;
+			const buttonVideo = swapButtonVideoRef.current;
 			buttonVideo?.addEventListener("click", handleHeroMiniVideoClick);
 
 			return () => {
@@ -161,15 +177,15 @@ export default function Hero() {
 						<button
 							type="button"
 							aria-label="change background video"
-							className="opacity-0 hover:opacity-100 origin-center transition-all duration-500 ease-in scale-50 hover:scale-100"
+							className="opacity-70 hover:opacity-100 rounded-3xl hover:rounded-xl transition-all duration-500 overflow-clip ease-in object-cover scale-50 hover:scale-100 size-64"
 						>
 							<VideoElement
-								id={buttonVideoId.slice(1)}
+								id={swapButtonVideoId.slice(1)}
+								ref={swapButtonVideoRef}
 								src={getVideoSrc(
 									heroVideosNumber[(videoIndex.current + 1) % totalHeroVideos]
 								)}
 								className="origin-center object-cover size-64"
-								ref={buttonVideoRef}
 							/>
 						</button>
 					</div>
@@ -178,7 +194,7 @@ export default function Hero() {
 						src={getVideoSrc(
 							heroVideosNumber[(videoIndex.current + 1) % totalHeroVideos]
 						)}
-						className="z-20 absolute opacity-0 object-center object-cover size-64"
+						className="z-20 absolute opacity-0 rounded-xl object-center object-cover size-64"
 						ref={nextBackgroundVideoRef}
 						autoPlay
 					/>
