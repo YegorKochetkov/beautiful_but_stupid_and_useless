@@ -214,12 +214,15 @@ export default function Hero() {
 					/>
 				</div>
 				<HeroHeader />
-				<span
-					aria-hidden
-					className="right-5 sm:right-10 bottom-5 absolute font-black font-zentry-regular text-5xl text-bbsu-black-700 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase special-font"
+			</div>
+			<div className="top-36 sm:top-44 md:top-60 lg:top-[22rem] left-5 sm:left-10 absolute z-10">
+				<Button
+					id="watch-trailer"
+					leftIcon={<TiLocationArrow />}
+					className="promo-button"
 				>
-					<span>u</span>seless
-				</span>
+					Watch trailer
+				</Button>
 			</div>
 		</div>
 	);
@@ -269,15 +272,13 @@ const HeroHeader = () => {
 					</span>
 				</h1>
 			</div>
-			<div className="top-36 sm:top-44 md:top-60 lg:top-[22rem] left-5 sm:left-10 absolute">
-				<Button
-					id="watch-trailer"
-					leftIcon={<TiLocationArrow />}
-					className="promo-button"
-				>
-					Watch trailer
-				</Button>
-			</div>
+
+			<span
+				aria-hidden
+				className="right-5 sm:right-10 bottom-5 absolute font-black font-zentry-regular text-5xl text-bbsu-black-700 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase special-font"
+			>
+				<span>u</span>seless
+			</span>
 		</div>
 	);
 };
