@@ -17,7 +17,7 @@ export default function Hero() {
 			>
 				<VideoBackground gsapScope={videoFrame} />
 				<HeroHeader />
-				<div className="top-36 sm:top-44 md:top-60 lg:top-[22rem] left-5 sm:left-10 absolute z-30">
+				<div className="top-36 sm:top-44 md:top-60 lg:top-[22rem] left-5 sm:left-10 absolute z-40">
 					<Button
 						id="watch-trailer"
 						leftIcon={<TiLocationArrow />}
