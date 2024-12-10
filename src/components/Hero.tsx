@@ -88,7 +88,7 @@ const HeroHeader = () => {
 
 const ANIMATION_CONFIG = {
 	DURATION: {
-		BACKGROUND_EXPAND: 0.5,
+		BACKGROUND_EXPAND: 0.7,
 		BACKGROUND_RESET: 0,
 		BUTTON_EXPAND: 1.5,
 	},
@@ -131,12 +131,12 @@ const VideoBackground = ({
 		[]
 	);
 
-	const handleCurrentVideoLoaded = React.useCallback(() => {
+	const handleCurrentVideoLoaded = () => {
 		if (nextBackgroundVideoRef.current && currentBackgroundVideoRef.current) {
 			currentBackgroundVideoRef.current.currentTime =
 				nextBackgroundVideoRef.current.currentTime;
 		}
-	}, []);
+	};
 
 	useGSAP(
 		(_context, contextSafe) => {
@@ -173,18 +173,19 @@ const VideoBackground = ({
 									currentBackgroundVideoRef.current.src = getVideoSrc(
 										heroVideosNumber[(videoIndex.current + 1) % totalHeroVideos]
 									);
-									currentBackgroundVideoRef.current.currentTime =
-										nextBackgroundVideoRef.current.currentTime;
 								}
 							},
 						}
 					)
-					// Restore current background video phase 1
+					// Restore current background video
 					.to(
 						nextBackgroundVideoId,
 						{
 							opacity: ANIMATION_CONFIG.STATE.BACKGROUND_OPACITY_TO,
 							duration: ANIMATION_CONFIG.DURATION.BACKGROUND_RESET,
+							zIndex: ANIMATION_CONFIG.STATE.BACKGROUND_Z_INDEX_TO,
+							width: ANIMATION_CONFIG.SIZE.MINI,
+							height: ANIMATION_CONFIG.SIZE.MINI,
 							ease: "power1.inOut",
 							onComplete: () => {
 								if (
@@ -196,22 +197,13 @@ const VideoBackground = ({
 
 									nextBackgroundVideoRef.current.src = getVideoSrc(nextIndex);
 									swapButtonVideoRef.current.src = getVideoSrc(nextIndex);
+
+									gsap.set(swapButtonVideoRef.current, { visibility: "visible" });
 								}
 							},
 						},
-						`>+=0.5`
+						`>+=1`
 					)
-					// Restore current background video phase 2
-					.to(nextBackgroundVideoId, {
-						zIndex: ANIMATION_CONFIG.STATE.BACKGROUND_Z_INDEX_TO,
-						width: ANIMATION_CONFIG.SIZE.MINI,
-						height: ANIMATION_CONFIG.SIZE.MINI,
-						duration: ANIMATION_CONFIG.DURATION.BACKGROUND_RESET,
-						ease: "power1.out",
-						onComplete: () => {
-							gsap.set(swapButtonVideoRef.current, { visibility: "visible" });
-						},
-					})
 					// Expand swap button
 					.fromTo(
 						swapButtonVideoRef.current,
@@ -228,7 +220,7 @@ const VideoBackground = ({
 							duration: ANIMATION_CONFIG.DURATION.BUTTON_EXPAND,
 							ease: "elastic.out(1, 0.5)",
 						},
-						`<+=0.5`
+						`<+=1`
 					)
 					// Update video index
 					.call(
@@ -236,7 +228,7 @@ const VideoBackground = ({
 							videoIndex.current = (videoIndex.current + 1) % totalHeroVideos;
 						},
 						[],
-						`<-=0.5`
+						`<-=1`
 					);
 
 				tl.play();
