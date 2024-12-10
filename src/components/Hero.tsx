@@ -131,13 +131,6 @@ const VideoBackground = ({
 		[]
 	);
 
-	const handleCurrentVideoLoaded = () => {
-		if (nextBackgroundVideoRef.current && currentBackgroundVideoRef.current) {
-			currentBackgroundVideoRef.current.currentTime =
-				nextBackgroundVideoRef.current.currentTime;
-		}
-	};
-
 	useGSAP(
 		(_context, contextSafe) => {
 			if (!contextSafe) return;
@@ -167,17 +160,55 @@ const VideoBackground = ({
 							borderRadius: 0,
 							onComplete: () => {
 								if (
-									nextBackgroundVideoRef.current &&
-									currentBackgroundVideoRef.current
+									currentBackgroundVideoRef.current &&
+									swapButtonVideoRef.current
 								) {
 									currentBackgroundVideoRef.current.src = getVideoSrc(
 										heroVideosNumber[(videoIndex.current + 1) % totalHeroVideos]
 									);
+
+									swapButtonVideoRef.current.src = getVideoSrc(
+										heroVideosNumber[(videoIndex.current + 2) % totalHeroVideos]
+									);
 								}
 							},
-						}
+						},
+						`0`
 					)
-					// Restore current background video
+					// Expand swap button
+					.fromTo(
+						swapButtonVideoRef.current,
+						{
+							opacity: ANIMATION_CONFIG.STATE.BUTTON_OPACITY_FROM,
+							scale: ANIMATION_CONFIG.STATE.BUTTON_SCALE_FROM,
+							zIndex: ANIMATION_CONFIG.STATE.BUTTON_Z_INDEX_FROM,
+							visibility: "visible",
+						},
+						{
+							ease: "elastic.out(1, 0.5)",
+							duration: ANIMATION_CONFIG.DURATION.BUTTON_EXPAND,
+							width: ANIMATION_CONFIG.SIZE.MINI,
+							height: ANIMATION_CONFIG.SIZE.MINI,
+							opacity: ANIMATION_CONFIG.STATE.BUTTON_OPACITY_TO,
+							scale: ANIMATION_CONFIG.STATE.BUTTON_SCALE_TO,
+						},
+						`1.1`
+					)
+					// Sync current background video
+					.call(
+						() => {
+							if (
+								nextBackgroundVideoRef.current &&
+								currentBackgroundVideoRef.current
+							) {
+								currentBackgroundVideoRef.current.currentTime =
+									nextBackgroundVideoRef.current.currentTime;
+							}
+						},
+						[],
+						`1.2`
+					)
+					// Reset current background video
 					.to(
 						nextBackgroundVideoId,
 						{
@@ -187,48 +218,18 @@ const VideoBackground = ({
 							width: ANIMATION_CONFIG.SIZE.MINI,
 							height: ANIMATION_CONFIG.SIZE.MINI,
 							ease: "power1.inOut",
+
 							onComplete: () => {
-								if (
-									nextBackgroundVideoRef.current &&
-									swapButtonVideoRef.current
-								) {
-									const nextIndex =
-										heroVideosNumber[(videoIndex.current + 2) % totalHeroVideos];
+								if (nextBackgroundVideoRef.current) {
+									nextBackgroundVideoRef.current.src = getVideoSrc(
+										heroVideosNumber[(videoIndex.current + 2) % totalHeroVideos]
+									);
 
-									nextBackgroundVideoRef.current.src = getVideoSrc(nextIndex);
-									swapButtonVideoRef.current.src = getVideoSrc(nextIndex);
-
-									gsap.set(swapButtonVideoRef.current, { visibility: "visible" });
+									videoIndex.current = (videoIndex.current + 1) % totalHeroVideos;
 								}
 							},
 						},
-						`>+=1`
-					)
-					// Expand swap button
-					.fromTo(
-						swapButtonVideoRef.current,
-						{
-							opacity: ANIMATION_CONFIG.STATE.BUTTON_OPACITY_FROM,
-							scale: ANIMATION_CONFIG.STATE.BUTTON_SCALE_FROM,
-							zIndex: ANIMATION_CONFIG.STATE.BUTTON_Z_INDEX_FROM,
-						},
-						{
-							width: ANIMATION_CONFIG.SIZE.MINI,
-							height: ANIMATION_CONFIG.SIZE.MINI,
-							opacity: ANIMATION_CONFIG.STATE.BUTTON_OPACITY_TO,
-							scale: ANIMATION_CONFIG.STATE.BUTTON_SCALE_TO,
-							duration: ANIMATION_CONFIG.DURATION.BUTTON_EXPAND,
-							ease: "elastic.out(1, 0.5)",
-						},
-						`<+=1`
-					)
-					// Update video index
-					.call(
-						() => {
-							videoIndex.current = (videoIndex.current + 1) % totalHeroVideos;
-						},
-						[],
-						`<-=1`
+						`1.3`
 					);
 
 				tl.play();
@@ -308,7 +309,6 @@ const VideoBackground = ({
 				id={currentBackgroundVideoId.slice(1)}
 				src={getVideoSrc(heroVideosNumber[videoIndex.current])}
 				className="absolute object-center object-cover size-full"
-				onLoadedData={handleCurrentVideoLoaded}
 				ref={currentBackgroundVideoRef}
 				autoPlay
 			/>
