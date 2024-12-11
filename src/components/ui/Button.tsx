@@ -6,7 +6,12 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 	rightIcon?: React.ReactNode;
 };
 
-const Button = ({ leftIcon, children, rightIcon, ...props }: ButtonProps) => {
+export const Button = ({
+	leftIcon,
+	children,
+	rightIcon,
+	...props
+}: ButtonProps) => {
 	return (
 		<button {...props}>
 			{leftIcon && <span>{leftIcon}</span>}
@@ -15,5 +20,3 @@ const Button = ({ leftIcon, children, rightIcon, ...props }: ButtonProps) => {
 		</button>
 	);
 };
-
-export default Button;
