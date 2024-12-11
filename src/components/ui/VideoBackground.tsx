@@ -38,10 +38,6 @@ export const VideoBackground = ({
 	const heroVideosNumber = [1, 2, 3, 4] as const;
 	const totalHeroVideos = heroVideosNumber.length;
 
-	const nextBackgroundVideoId = "#next-background-video";
-	const currentBackgroundVideoId = "#current-background-video";
-	const swapButtonVideoId = "#swap-button-video";
-
 	const videoIndex = React.useRef(0);
 	const swapButtonRef = React.useRef<HTMLButtonElement>(null);
 	const swapButtonVideoRef = React.useRef<HTMLVideoElement>(null);
@@ -69,7 +65,7 @@ export const VideoBackground = ({
 				})
 					// Expand next background video
 					.fromTo(
-						nextBackgroundVideoId,
+						nextBackgroundVideoRef.current,
 						{
 							opacity:
 								BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BACKGROUND_OPACITY_FROM,
@@ -139,7 +135,7 @@ export const VideoBackground = ({
 					)
 					// Reset current background video
 					.to(
-						nextBackgroundVideoId,
+						nextBackgroundVideoRef.current,
 						{
 							ease: "power1.inOut",
 							duration:
@@ -220,7 +216,6 @@ export const VideoBackground = ({
 					className="opacity-70 hover:opacity-100  transition-all duration-500 overflow-clip ease-in object-cover scale-50 hover:scale-100 "
 				>
 					<VideoElement
-						id={swapButtonVideoId.slice(1)}
 						ref={swapButtonVideoRef}
 						src={getVideoSrc(
 							heroVideosNumber[(videoIndex.current + 1) % totalHeroVideos]
@@ -230,7 +225,6 @@ export const VideoBackground = ({
 				</button>
 			</div>
 			<VideoElement
-				id={nextBackgroundVideoId.slice(1)}
 				src={getVideoSrc(
 					heroVideosNumber[(videoIndex.current + 1) % totalHeroVideos]
 				)}
@@ -239,7 +233,6 @@ export const VideoBackground = ({
 				autoPlay
 			/>
 			<VideoElement
-				id={currentBackgroundVideoId.slice(1)}
 				src={getVideoSrc(heroVideosNumber[videoIndex.current])}
 				className="absolute object-center object-cover size-full"
 				ref={currentBackgroundVideoRef}
