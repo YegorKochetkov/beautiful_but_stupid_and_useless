@@ -43,6 +43,7 @@ export const VideoBackground = ({
 	const swapButtonVideoId = "#swap-button-video";
 
 	const videoIndex = React.useRef(0);
+	const swapButtonRef = React.useRef<HTMLButtonElement>(null);
 	const swapButtonVideoRef = React.useRef<HTMLVideoElement>(null);
 	const nextBackgroundVideoRef = React.useRef<HTMLVideoElement>(null);
 	const currentBackgroundVideoRef = React.useRef<HTMLVideoElement>(null);
@@ -166,7 +167,7 @@ export const VideoBackground = ({
 				tl.play();
 			});
 
-			const buttonVideo = swapButtonVideoRef.current;
+			const buttonVideo = swapButtonRef.current;
 			buttonVideo?.addEventListener("click", handleHeroMiniVideoClick);
 
 			return () => {
@@ -213,6 +214,7 @@ export const VideoBackground = ({
 		<div className="place-items-center grid w-screen h-screen">
 			<div className="z-50 absolute mask-clip-path rounded-lg overflow-hidden size-64">
 				<button
+					ref={swapButtonRef}
 					type="button"
 					aria-label="change background video"
 					className="opacity-70 hover:opacity-100  transition-all duration-500 overflow-clip ease-in object-cover scale-50 hover:scale-100 "
