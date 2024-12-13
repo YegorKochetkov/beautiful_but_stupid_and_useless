@@ -8,7 +8,7 @@ export function Hero() {
 	const videoFrame = React.useRef<HTMLDivElement>(null);
 
 	return (
-		<div className="relative w-screen h-dvh overflow-x-hidden isolate">
+		<div className="relative w-screen h-dvh overflow-x-hidden">
 			<div
 				id="video-frame"
 				ref={videoFrame}
@@ -16,15 +16,7 @@ export function Hero() {
 			>
 				<VideoBackground gsapScope={videoFrame} />
 				<HeroHeader />
-				<div className="top-36 sm:top-44 md:top-60 lg:top-[22rem] left-5 sm:left-10 absolute z-40">
-					<Button
-						id="watch-trailer"
-						leftIcon={<TiLocationArrow />}
-						className="promo-button"
-					>
-						Watch trailer
-					</Button>
-				</div>
+				<WatchTrailerButton />
 			</div>
 
 			<span
@@ -55,6 +47,20 @@ function HeroHeader() {
 					</span>
 				</h1>
 			</div>
+		</div>
+	);
+}
+
+function WatchTrailerButton() {
+	return (
+		<div className="top-36 sm:top-44 md:top-60 lg:top-[22rem] left-5 sm:left-10 absolute z-40">
+			<Button
+				id="watch-trailer"
+				leftIcon={<TiLocationArrow />}
+				className="promo-button"
+			>
+				Watch trailer
+			</Button>
 		</div>
 	);
 }

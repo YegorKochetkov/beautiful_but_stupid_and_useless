@@ -17,7 +17,6 @@ export const VideoElement = React.forwardRef<HTMLVideoElement, VideoProps>(
 				ref={ref}
 				aria-label="short clips of gameplay of random computer games"
 				className={className}
-				tabIndex={-1}
 				{...props}
 			/>
 		);

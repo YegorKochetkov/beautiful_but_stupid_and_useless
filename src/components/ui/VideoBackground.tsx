@@ -58,6 +58,11 @@ export const VideoBackground = ({
 				if (nextBackgroundVideoRef.current) {
 					nextBackgroundVideoRef.current.currentTime = 0;
 				}
+
+				if (swapButtonRef.current) {
+					swapButtonRef.current.disabled = true;
+				}
+
 				// Hide swap button
 				tl.set(swapButtonVideoRef.current, {
 					visibility:
@@ -98,27 +103,6 @@ export const VideoBackground = ({
 						},
 						`0`
 					)
-					// Expand swap button
-					.fromTo(
-						swapButtonVideoRef.current,
-						{
-							opacity:
-								BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_OPACITY_FROM,
-							scale: BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_SCALE_FROM,
-							zIndex: BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_Z_INDEX_FROM,
-							visibility:
-								BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_VISIBILITY_TO,
-						},
-						{
-							ease: "elastic.out(1, 0.5)",
-							duration: BACKGROUND_VIDEO_ANIMATION_CONFIG.DURATION.BUTTON_EXPAND,
-							width: BACKGROUND_VIDEO_ANIMATION_CONFIG.SIZE.MINI,
-							height: BACKGROUND_VIDEO_ANIMATION_CONFIG.SIZE.MINI,
-							opacity: BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_OPACITY_TO,
-							scale: BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_SCALE_TO,
-						},
-						`1.1`
-					)
 					// Sync current background video
 					.call(
 						() => {
@@ -131,7 +115,7 @@ export const VideoBackground = ({
 							}
 						},
 						[],
-						`1.2`
+						`0.9`
 					)
 					// Reset current background video
 					.to(
@@ -156,6 +140,32 @@ export const VideoBackground = ({
 									videoIndex.current = (videoIndex.current + 1) % totalHeroVideos;
 								}
 							},
+						},
+						`1.4`
+					)
+					// Expand swap button
+					.fromTo(
+						swapButtonVideoRef.current,
+						{
+							opacity:
+								BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_OPACITY_FROM,
+							scale: BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_SCALE_FROM,
+							zIndex: BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_Z_INDEX_FROM,
+							visibility:
+								BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_VISIBILITY_TO,
+						},
+						{
+							onStart: () => {
+								if (swapButtonRef.current) {
+									swapButtonRef.current.disabled = false;
+								}
+							},
+							ease: "elastic.inOut",
+							duration: BACKGROUND_VIDEO_ANIMATION_CONFIG.DURATION.BUTTON_EXPAND,
+							width: BACKGROUND_VIDEO_ANIMATION_CONFIG.SIZE.MINI,
+							height: BACKGROUND_VIDEO_ANIMATION_CONFIG.SIZE.MINI,
+							opacity: BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_OPACITY_TO,
+							scale: BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_SCALE_TO,
 						},
 						`1.4`
 					);
@@ -213,14 +223,14 @@ export const VideoBackground = ({
 					ref={swapButtonRef}
 					type="button"
 					aria-label="change background video"
-					className="opacity-70 hover:opacity-100  transition-all duration-500 overflow-clip ease-in object-cover scale-50 hover:scale-100 "
+					className="opacity-70 hover:opacity-100 transition-all duration-500 overflow-hidden ease-in hover:scale-100 object-cover scale-50 size-64"
 				>
 					<VideoElement
 						ref={swapButtonVideoRef}
 						src={getVideoSrc(
 							heroVideosNumber[(videoIndex.current + 1) % totalHeroVideos]
 						)}
-						className="origin-center object-cover size-64 border-4 border-bbsu-blue-75 rounded-3xl hover:rounded-xl"
+						className="border-4 border-bbsu-blue-75 rounded-3xl origin-center object-cover size-full"
 					/>
 				</button>
 			</div>
