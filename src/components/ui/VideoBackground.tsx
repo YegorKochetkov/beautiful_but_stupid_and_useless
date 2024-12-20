@@ -46,6 +46,13 @@ export const VideoBackground = ({
 
 	const getVideoSrc = (index: number) => `/videos/hero-${index}.mp4`;
 
+	const syncVideoOnLoaded = () => {
+		if (nextBackgroundVideoRef.current && currentBackgroundVideoRef.current) {
+			currentBackgroundVideoRef.current.currentTime =
+				nextBackgroundVideoRef.current.currentTime;
+		}
+	};
+
 	useGSAP(
 		(_context, contextSafe) => {
 			if (!contextSafe) return;
@@ -103,20 +110,6 @@ export const VideoBackground = ({
 						},
 						`0`
 					)
-					// Sync current background video
-					.call(
-						() => {
-							if (
-								nextBackgroundVideoRef.current &&
-								currentBackgroundVideoRef.current
-							) {
-								currentBackgroundVideoRef.current.currentTime =
-									nextBackgroundVideoRef.current.currentTime;
-							}
-						},
-						[],
-						`0.9`
-					)
 					// Reset current background video
 					.to(
 						nextBackgroundVideoRef.current,
@@ -141,7 +134,7 @@ export const VideoBackground = ({
 								}
 							},
 						},
-						`1.4`
+						`2.5`
 					)
 					// Expand swap button
 					.fromTo(
@@ -167,7 +160,7 @@ export const VideoBackground = ({
 							opacity: BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_OPACITY_TO,
 							scale: BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_SCALE_TO,
 						},
-						`1.4`
+						`1.9`
 					);
 
 				tl.play();
@@ -243,6 +236,7 @@ export const VideoBackground = ({
 				autoPlay
 			/>
 			<VideoElement
+				onLoadedData={syncVideoOnLoaded}
 				src={getVideoSrc(heroVideosNumber[videoIndex.current])}
 				className="absolute object-center object-cover size-full"
 				ref={currentBackgroundVideoRef}
