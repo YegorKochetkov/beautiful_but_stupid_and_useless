@@ -93,24 +93,29 @@ export const VideoBackground = ({
 							borderRadius:
 								BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE
 									.BACKGROUND_BORDER_RADIUS_TO,
-							onComplete: () => {
-								if (
-									currentBackgroundVideoRef.current &&
-									swapButtonVideoRef.current
-								) {
-									currentBackgroundVideoRef.current.src = getVideoSrc(
-										heroVideosNumber[(videoIndex.current + 1) % totalHeroVideos]
-									);
-
-									swapButtonVideoRef.current.src = getVideoSrc(
-										heroVideosNumber[(videoIndex.current + 2) % totalHeroVideos]
-									);
-								}
-							},
 						},
 						`0`
 					)
-					// Reset current background video
+					// Update current background & swap button video src
+					.call(
+						() => {
+							if (
+								currentBackgroundVideoRef.current &&
+								swapButtonVideoRef.current
+							) {
+								currentBackgroundVideoRef.current.src = getVideoSrc(
+									heroVideosNumber[(videoIndex.current + 1) % totalHeroVideos]
+								);
+
+								swapButtonVideoRef.current.src = getVideoSrc(
+									heroVideosNumber[(videoIndex.current + 2) % totalHeroVideos]
+								);
+							}
+						},
+						[],
+						`>`
+					)
+					// Collapse next background video
 					.to(
 						nextBackgroundVideoRef.current,
 						{
@@ -134,7 +139,7 @@ export const VideoBackground = ({
 								}
 							},
 						},
-						`2.5`
+						`>+=1.5`
 					)
 					// Expand swap button
 					.fromTo(
@@ -160,7 +165,7 @@ export const VideoBackground = ({
 							opacity: BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_OPACITY_TO,
 							scale: BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_SCALE_TO,
 						},
-						`1.9`
+						`<`
 					);
 
 				tl.play();
