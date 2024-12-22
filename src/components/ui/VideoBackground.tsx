@@ -49,7 +49,7 @@ export const VideoBackground = ({
 	const syncVideoOnLoaded = () => {
 		if (nextBackgroundVideoRef.current && currentBackgroundVideoRef.current) {
 			currentBackgroundVideoRef.current.currentTime =
-				nextBackgroundVideoRef.current.currentTime;
+				nextBackgroundVideoRef.current.currentTime + 0.07; // this addition prevent video jumps
 		}
 	};
 
@@ -128,18 +128,22 @@ export const VideoBackground = ({
 								BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BACKGROUND_Z_INDEX_TO,
 							width: BACKGROUND_VIDEO_ANIMATION_CONFIG.SIZE.MINI,
 							height: BACKGROUND_VIDEO_ANIMATION_CONFIG.SIZE.MINI,
-
-							onComplete: () => {
-								if (nextBackgroundVideoRef.current) {
-									nextBackgroundVideoRef.current.src = getVideoSrc(
-										heroVideosNumber[(videoIndex.current + 2) % totalHeroVideos]
-									);
-
-									videoIndex.current = (videoIndex.current + 1) % totalHeroVideos;
-								}
-							},
 						},
-						`>+=1.5`
+						`>+=1.3`
+					)
+					// Update next background video src
+					.call(
+						() => {
+							if (nextBackgroundVideoRef.current) {
+								nextBackgroundVideoRef.current.src = getVideoSrc(
+									heroVideosNumber[(videoIndex.current + 2) % totalHeroVideos]
+								);
+
+								videoIndex.current = (videoIndex.current + 1) % totalHeroVideos;
+							}
+						},
+						[],
+						`>`
 					)
 					// Expand swap button
 					.fromTo(
