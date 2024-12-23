@@ -2,8 +2,6 @@ import React from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
-import { VideoElement } from "./VideoElement";
-
 const BACKGROUND_VIDEO_ANIMATION_CONFIG = {
 	DURATION: {
 		BACKGROUND_EXPAND: 0.7,
@@ -49,7 +47,7 @@ export const VideoBackground = ({
 	const syncVideoOnLoaded = () => {
 		if (nextBackgroundVideoRef.current && currentBackgroundVideoRef.current) {
 			currentBackgroundVideoRef.current.currentTime =
-				nextBackgroundVideoRef.current.currentTime + 0.07; // this addition prevent video jumps
+				nextBackgroundVideoRef.current.currentTime + 0.08; // this addition prevent video jumps
 		}
 	};
 
@@ -227,7 +225,7 @@ export const VideoBackground = ({
 					aria-label="change background video"
 					className="opacity-70 hover:opacity-100 transition-all duration-500 overflow-hidden ease-in hover:scale-100 object-cover scale-50 size-64"
 				>
-					<VideoElement
+					<video
 						ref={swapButtonVideoRef}
 						src={getVideoSrc(
 							heroVideosNumber[(videoIndex.current + 1) % totalHeroVideos]
@@ -236,7 +234,7 @@ export const VideoBackground = ({
 					/>
 				</button>
 			</div>
-			<VideoElement
+			<video
 				src={getVideoSrc(
 					heroVideosNumber[(videoIndex.current + 1) % totalHeroVideos]
 				)}
@@ -244,7 +242,7 @@ export const VideoBackground = ({
 				ref={nextBackgroundVideoRef}
 				autoPlay
 			/>
-			<VideoElement
+			<video
 				onLoadedData={syncVideoOnLoaded}
 				src={getVideoSrc(heroVideosNumber[videoIndex.current])}
 				className="absolute object-center object-cover size-full"
