@@ -5,26 +5,38 @@ import { Button } from "./ui/Button";
 import { VideoBackground } from "./ui/VideoBackground";
 
 export function Hero() {
-	const videoFrame = React.useRef<HTMLDivElement>(null);
+	const heroComponent = React.useRef<HTMLDivElement>(null);
+	const [allVideosLoaded, setAllVideosLoaded] = React.useState(false);
+
+	const styleToPreventContentSplash = { opacity: allVideosLoaded ? 1 : 0 };
 
 	return (
-		<div className="relative w-screen h-dvh overflow-x-hidden">
-			<div
-				id="video-frame"
-				ref={videoFrame}
-				className="relative z-10 bg-bbsu-blue-75 w-screen h-dvh overflow-hidden"
-			>
-				<VideoBackground gsapScope={videoFrame} />
-				<HeroHeader />
-				<WatchTrailerButton />
-			</div>
+		<div
+			ref={heroComponent}
+			className="relative w-screen h-dvh overflow-x-hidden"
+		>
+			{allVideosLoaded ? null : <Loader />}
+			<div style={styleToPreventContentSplash}>
+				<div
+					id="video-frame"
+					className="relative z-10 bg-bbsu-blue-75 w-screen h-dvh overflow-hidden"
+				>
+					<VideoBackground
+						gsapScope={heroComponent}
+						onAllVideosLoaded={setAllVideosLoaded}
+						allVideosLoaded={allVideosLoaded}
+					/>
+					<HeroHeader />
+					<WatchTrailerButton />
+				</div>
 
-			<span
-				aria-hidden
-				className="right-5 sm:right-10 bottom-5 absolute font-black font-zentry-regular text-5xl text-bbsu-black-700 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase special-font"
-			>
-				<span>u</span>seless
-			</span>
+				<span
+					aria-hidden
+					className="right-5 sm:right-10 bottom-5 absolute font-black font-zentry-regular text-5xl text-bbsu-black-700 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase special-font"
+				>
+					<span>u</span>seless
+				</span>
+			</div>
 		</div>
 	);
 }
@@ -61,6 +73,17 @@ function WatchTrailerButton() {
 			>
 				Watch trailer
 			</Button>
+		</div>
+	);
+}
+
+function Loader() {
+	return (
+		<div
+			id="video-loader"
+			className="flex flex-col items-center justify-center  absolute z-[100] bg-bbsu-blue-75 w-screen h-dvh overflow-hidden"
+		>
+			<span className="loader" />
 		</div>
 	);
 }
