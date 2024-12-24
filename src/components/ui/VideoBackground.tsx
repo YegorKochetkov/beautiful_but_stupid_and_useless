@@ -30,8 +30,12 @@ const BACKGROUND_VIDEO_ANIMATION_CONFIG = {
 
 export const VideoBackground = ({
 	gsapScope,
+	onAllVideosLoaded,
+	allVideosLoaded,
 }: {
 	gsapScope?: React.RefObject<HTMLDivElement>;
+	onAllVideosLoaded?: React.Dispatch<React.SetStateAction<boolean>>;
+	allVideosLoaded?: boolean;
 }) => {
 	const heroVideosNumber = [1, 2, 3, 4] as const;
 	const totalHeroVideos = heroVideosNumber.length;
@@ -44,7 +48,25 @@ export const VideoBackground = ({
 
 	const getVideoSrc = (index: number) => `/videos/hero-${index}.mp4`;
 
+	const loadedVideosCount = React.useRef(0);
+
+	const checkIsAllVideosLoaded = () => {
+		if (loadedVideosCount.current < totalHeroVideos) {
+			loadedVideosCount.current += 1;
+		}
+
+		if (
+			loadedVideosCount.current === totalHeroVideos &&
+			onAllVideosLoaded &&
+			!allVideosLoaded
+		) {
+			onAllVideosLoaded(true);
+		}
+	};
+
 	const syncVideoOnLoaded = () => {
+		checkIsAllVideosLoaded();
+
 		if (nextBackgroundVideoRef.current && currentBackgroundVideoRef.current) {
 			currentBackgroundVideoRef.current.currentTime =
 				nextBackgroundVideoRef.current.currentTime + 0.08; // this addition prevent video jumps
@@ -91,27 +113,23 @@ export const VideoBackground = ({
 							borderRadius:
 								BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE
 									.BACKGROUND_BORDER_RADIUS_TO,
+							// Update current background & swap button video src
+							onComplete: () => {
+								if (
+									currentBackgroundVideoRef.current &&
+									swapButtonVideoRef.current
+								) {
+									currentBackgroundVideoRef.current.src = getVideoSrc(
+										heroVideosNumber[(videoIndex.current + 1) % totalHeroVideos]
+									);
+
+									swapButtonVideoRef.current.src = getVideoSrc(
+										heroVideosNumber[(videoIndex.current + 2) % totalHeroVideos]
+									);
+								}
+							},
 						},
 						`0`
-					)
-					// Update current background & swap button video src
-					.call(
-						() => {
-							if (
-								currentBackgroundVideoRef.current &&
-								swapButtonVideoRef.current
-							) {
-								currentBackgroundVideoRef.current.src = getVideoSrc(
-									heroVideosNumber[(videoIndex.current + 1) % totalHeroVideos]
-								);
-
-								swapButtonVideoRef.current.src = getVideoSrc(
-									heroVideosNumber[(videoIndex.current + 2) % totalHeroVideos]
-								);
-							}
-						},
-						[],
-						`>`
 					)
 					// Collapse next background video
 					.to(
@@ -126,22 +144,16 @@ export const VideoBackground = ({
 								BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BACKGROUND_Z_INDEX_TO,
 							width: BACKGROUND_VIDEO_ANIMATION_CONFIG.SIZE.MINI,
 							height: BACKGROUND_VIDEO_ANIMATION_CONFIG.SIZE.MINI,
+							// Update next background video src
+							onComplete: () => {
+								if (nextBackgroundVideoRef.current) {
+									nextBackgroundVideoRef.current.src = getVideoSrc(
+										heroVideosNumber[(videoIndex.current + 2) % totalHeroVideos]
+									);
+								}
+							},
 						},
 						`>+=1.3`
-					)
-					// Update next background video src
-					.call(
-						() => {
-							if (nextBackgroundVideoRef.current) {
-								nextBackgroundVideoRef.current.src = getVideoSrc(
-									heroVideosNumber[(videoIndex.current + 2) % totalHeroVideos]
-								);
-
-								videoIndex.current = (videoIndex.current + 1) % totalHeroVideos;
-							}
-						},
-						[],
-						`>`
 					)
 					// Expand swap button
 					.fromTo(
@@ -159,7 +171,10 @@ export const VideoBackground = ({
 								if (swapButtonRef.current) {
 									swapButtonRef.current.disabled = false;
 								}
+
+								videoIndex.current = (videoIndex.current + 1) % totalHeroVideos;
 							},
+
 							ease: "elastic.inOut",
 							duration: BACKGROUND_VIDEO_ANIMATION_CONFIG.DURATION.BUTTON_EXPAND,
 							width: BACKGROUND_VIDEO_ANIMATION_CONFIG.SIZE.MINI,
@@ -167,7 +182,7 @@ export const VideoBackground = ({
 							opacity: BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_OPACITY_TO,
 							scale: BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_SCALE_TO,
 						},
-						`<`
+						`>`
 					);
 
 				tl.play();
@@ -183,7 +198,6 @@ export const VideoBackground = ({
 		},
 		{
 			scope: gsapScope,
-			dependencies: [videoIndex.current, getVideoSrc, totalHeroVideos],
 		}
 	);
 
@@ -226,6 +240,10 @@ export const VideoBackground = ({
 					className="opacity-70 hover:opacity-100 transition-all duration-500 overflow-hidden ease-in hover:scale-100 object-cover scale-50 size-64"
 				>
 					<video
+						loop
+						muted
+						aria-label="short clips of gameplay of random computer games"
+						onLoadedData={checkIsAllVideosLoaded}
 						ref={swapButtonVideoRef}
 						src={getVideoSrc(
 							heroVideosNumber[(videoIndex.current + 1) % totalHeroVideos]
@@ -235,19 +253,44 @@ export const VideoBackground = ({
 				</button>
 			</div>
 			<video
+				loop
+				muted
+				autoPlay
+				aria-label="short clips of gameplay of random computer games"
+				onLoadedData={checkIsAllVideosLoaded}
 				src={getVideoSrc(
 					heroVideosNumber[(videoIndex.current + 1) % totalHeroVideos]
 				)}
 				className="z-20 absolute opacity-0 rounded-xl object-center object-cover size-64"
 				ref={nextBackgroundVideoRef}
-				autoPlay
 			/>
 			<video
+				loop
+				muted
+				autoPlay
+				aria-label="short clips of gameplay of random computer games"
 				onLoadedData={syncVideoOnLoaded}
 				src={getVideoSrc(heroVideosNumber[videoIndex.current])}
 				className="absolute object-center object-cover size-full"
 				ref={currentBackgroundVideoRef}
+			/>
+			<video
+				muted
 				autoPlay
+				hidden
+				onLoadedData={checkIsAllVideosLoaded}
+				src={getVideoSrc(
+					heroVideosNumber[(videoIndex.current + 2) % totalHeroVideos]
+				)}
+			/>
+			<video
+				muted
+				autoPlay
+				hidden
+				onLoadedData={checkIsAllVideosLoaded}
+				src={getVideoSrc(
+					heroVideosNumber[(videoIndex.current + 3) % totalHeroVideos]
+				)}
 			/>
 		</div>
 	);
