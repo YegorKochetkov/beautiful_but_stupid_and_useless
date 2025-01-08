@@ -170,7 +170,7 @@ export const VideoBackground = ({
 	const videoButtonStyle =
 		"size-44 z-50 rounded-xl border-2 border-bbsu-black-700 opacity-70 hover:opacity-100 transition-opacity duration-300 ease-in-out button-appearance";
 	const expandedVideoStyle =
-		"size-full z-10 border-2 border-transparent [transform:rotateX(0deg)_rotateY(0deg)]";
+		"size-full z-10 border-2 border-transparent [transform:rotateX(0deg)_rotateY(0deg)] cursor-default";
 	const hiddenVideoStyle = `${videoButtonStyle} z-0 hidden`;
 
 	return (
