@@ -101,3 +101,23 @@ body {
 		}
 	}
 }
+
+@layer components {
+	.hover-3d-effect {
+		@apply [transform:rotateX(var(--x-rotation))_rotateY(var(--y-rotation))]
+			after:content-[""] after:absolute
+			after:inset-0 after:pointer-events-none
+			after:bg-[radial-gradient(at_var(--x)_var(--y),rgba(255,255,255,0.2)_10%,transparent_70%)];
+	}
+
+	.button-appearance {
+		animation: show 0.5s ease-in-out;
+	}
+	@keyframes show {
+		from {
+			opacity: 0;
+			width: 0;
+			height: 0;
+		}
+	}
+}

@@ -19,7 +19,7 @@ export function Hero() {
 			<div style={styleToPreventContentSplash}>
 				<div
 					id="video-frame"
-					className="relative z-10 bg-bbsu-blue-75 w-screen h-dvh overflow-hidden"
+					className="relative bg-bbsu-blue-75 w-screen h-dvh overflow-hidden"
 				>
 					<VideoBackground
 						gsapScope={heroComponent}
@@ -29,13 +29,7 @@ export function Hero() {
 					<HeroHeader />
 					<WatchTrailerButton />
 				</div>
-
-				<span
-					aria-hidden
-					className="right-5 sm:right-10 bottom-5 absolute font-black font-zentry-regular text-5xl text-bbsu-black-700 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase special-font"
-				>
-					<span>u</span>seless
-				</span>
+				<DecorativeElements />
 			</div>
 		</div>
 	);
@@ -43,29 +37,27 @@ export function Hero() {
 
 function HeroHeader() {
 	return (
-		<div className="top-0 left-0 z-40 absolute size-full">
-			<div className="mt-12 px-5 sm:px-10">
-				<h1 className="sm:right-10 font-black font-zentry-regular text-5xl text-bbsu-blue-100 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase">
-					<span className="relative">
-						<span className="special-font">
-							Be<span>au</span>tif<span>u</span>l
-						</span>{" "}
-						<span className="-bottom-5 sm:-bottom-6 md:-bottom-7 lg:-bottom-9 left-0 absolute font-robert-regular text-bbsu-blue-100 text-lg sm:text-2xl md:text-4xl lg:text-5xl">
-							but stupid and
-						</span>
+		<div className="mt-12 px-5 sm:px-10">
+			<h1 className="sm:right-10 font-black font-zentry-regular text-5xl text-bbsu-blue-100 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase">
+				<span className="relative">
+					<span className="special-font">
+						Be<span>au</span>tif<span>u</span>l
 					</span>{" "}
-					<span className="right-5 sm:right-10 bottom-5 z-40 absolute font-black font-zentry-regular text-5xl text-bbsu-blue-75 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase special-font">
-						<span>u</span>seless
+					<span className="-bottom-5 sm:-bottom-6 md:-bottom-7 lg:-bottom-9 left-0 absolute font-robert-regular text-bbsu-blue-100 text-lg sm:text-2xl md:text-4xl lg:text-5xl">
+						but stupid and
 					</span>
-				</h1>
-			</div>
+				</span>{" "}
+				<span className="right-5 sm:right-10 bottom-5 z-40 absolute font-black font-zentry-regular text-5xl text-bbsu-blue-75 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase special-font">
+					<span>u</span>seless
+				</span>
+			</h1>
 		</div>
 	);
 }
 
 function WatchTrailerButton() {
 	return (
-		<div className="top-36 sm:top-44 md:top-60 lg:top-[22rem] left-5 sm:left-10 absolute z-40">
+		<div className="top-36 sm:top-44 md:top-60 lg:top-[22rem] left-5 sm:left-10 absolute">
 			<Button
 				id="watch-trailer"
 				leftIcon={<TiLocationArrow />}
@@ -80,10 +72,21 @@ function WatchTrailerButton() {
 function Loader() {
 	return (
 		<div
-			id="video-loader"
+			id="loader"
 			className="flex flex-col items-center justify-center  absolute z-[100] bg-bbsu-blue-75 w-screen h-dvh overflow-hidden"
 		>
 			<span className="loader" />
 		</div>
+	);
+}
+
+function DecorativeElements() {
+	return (
+		<span
+			aria-hidden
+			className="right-5 sm:right-10 bottom-5 absolute font-black font-zentry-regular text-5xl text-bbsu-black-700 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase special-font"
+		>
+			<span>u</span>seless
+		</span>
 	);
 }

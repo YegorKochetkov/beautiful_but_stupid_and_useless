@@ -2,75 +2,56 @@ import React from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
-const BACKGROUND_VIDEO_ANIMATION_CONFIG = {
-	DURATION: {
-		BACKGROUND_EXPAND: 0.7,
-		BACKGROUND_RESET: 0,
-		BUTTON_EXPAND: 1.5,
-	},
-	STATE: {
-		BACKGROUND_BORDER_RADIUS_TO: 0,
-		BACKGROUND_OPACITY_FROM: 1,
-		BACKGROUND_OPACITY_TO: 0,
-		BACKGROUND_Z_INDEX_FROM: 20,
-		BACKGROUND_Z_INDEX_TO: -20,
-		BUTTON_Z_INDEX_FROM: 50,
-		BUTTON_OPACITY_FROM: 0,
-		BUTTON_OPACITY_TO: 1,
-		BUTTON_VISIBILITY_FROM: "hidden",
-		BUTTON_VISIBILITY_TO: "visible",
-		BUTTON_SCALE_FROM: 0.25,
-		BUTTON_SCALE_TO: 1,
-	},
-	SIZE: {
-		MINI: "16rem",
-		FULL: "100%",
-	},
-} as const;
-
 export const VideoBackground = ({
 	gsapScope,
 	onAllVideosLoaded,
 	allVideosLoaded,
 }: {
 	gsapScope?: React.RefObject<HTMLDivElement>;
-	onAllVideosLoaded?: React.Dispatch<React.SetStateAction<boolean>>;
-	allVideosLoaded?: boolean;
+	onAllVideosLoaded: React.Dispatch<React.SetStateAction<boolean>>;
+	allVideosLoaded: boolean;
 }) => {
 	const heroVideosNumber = [1, 2, 3, 4] as const;
 	const totalHeroVideos = heroVideosNumber.length;
 
-	const videoIndex = React.useRef(0);
-	const swapButtonRef = React.useRef<HTMLButtonElement>(null);
-	const swapButtonVideoRef = React.useRef<HTMLVideoElement>(null);
-	const nextBackgroundVideoRef = React.useRef<HTMLVideoElement>(null);
-	const currentBackgroundVideoRef = React.useRef<HTMLVideoElement>(null);
-
-	const getVideoSrc = (index: number) => `/videos/hero-${index}.mp4`;
-
+	// Loader is shown while all videos are not loaded
 	const loadedVideosCount = React.useRef(0);
-
 	const checkIsAllVideosLoaded = () => {
 		if (loadedVideosCount.current < totalHeroVideos) {
 			loadedVideosCount.current += 1;
 		}
 
-		if (
-			loadedVideosCount.current === totalHeroVideos &&
-			onAllVideosLoaded &&
-			!allVideosLoaded
-		) {
+		if (loadedVideosCount.current === totalHeroVideos && !allVideosLoaded) {
 			onAllVideosLoaded(true);
 		}
 	};
 
-	const syncVideoOnLoaded = () => {
-		checkIsAllVideosLoaded();
+	const [currentVideoIndex, setCurrentVideoIndex] = React.useState(0);
+	const nextVideoIndex = (currentVideoIndex + 1) % totalHeroVideos;
 
-		if (nextBackgroundVideoRef.current && currentBackgroundVideoRef.current) {
-			currentBackgroundVideoRef.current.currentTime =
-				nextBackgroundVideoRef.current.currentTime + 0.08; // this addition prevent video jumps
-		}
+	// 3-d effect for the video button
+	const handleMouseMove = (ev: React.MouseEvent<HTMLDivElement>) => {
+		const videoButton = ev.currentTarget.querySelector<HTMLButtonElement>(
+			'button[data-is-button="true"]'
+		);
+
+		if (!videoButton) return;
+
+		const buttonRect = videoButton.getBoundingClientRect();
+
+		const x = ev.clientX - buttonRect.left;
+		const y = ev.clientY - buttonRect.top;
+
+		const xPercentage = x / buttonRect.width;
+		const yPercentage = y / buttonRect.height;
+
+		const xRotation = (xPercentage - 0.5) * 7;
+		const yRotation = (0.5 - yPercentage) * 7;
+
+		videoButton.style.setProperty("--x-rotation", `${yRotation}deg`);
+		videoButton.style.setProperty("--y-rotation", `${xRotation}deg`);
+		videoButton.style.setProperty("--x", `${xPercentage * 80}%`);
+		videoButton.style.setProperty("--y", `${yPercentage * 60}%`);
 	};
 
 	useGSAP(
@@ -79,219 +60,149 @@ export const VideoBackground = ({
 
 			const tl = gsap.timeline({ paused: true });
 
+			const nextVideoButton = document.querySelector<HTMLButtonElement>(
+				'button[data-is-button="true"]'
+			);
+			const videoElementInNextVideoButton =
+				nextVideoButton?.querySelector<HTMLVideoElement>("video");
+
+			const expandedVideo = document.querySelector<HTMLButtonElement>(
+				'button[data-is-expanded="true"]'
+			);
+			const videoElementInExpandedVideo =
+				expandedVideo?.querySelector<HTMLVideoElement>("video");
+
 			const handleHeroMiniVideoClick = contextSafe(() => {
 				tl.clear();
-				// Start next background video from the beginning
-				if (nextBackgroundVideoRef.current) {
-					nextBackgroundVideoRef.current.currentTime = 0;
+				// Prevent user click while next video is expanding
+				if (nextVideoButton) {
+					nextVideoButton.disabled = true;
 				}
 
-				if (swapButtonRef.current) {
-					swapButtonRef.current.disabled = true;
-				}
+				// Expand next background video
+				tl.to(nextVideoButton, {
+					onstart: async () => {
+						// Play expanding video from the beginning
+						if (videoElementInNextVideoButton) {
+							videoElementInNextVideoButton.currentTime = 0;
+							await videoElementInNextVideoButton.play();
+						}
+					},
+					ease: "power2.inOut",
+					duration: 1,
+					width: "100%",
+					height: "100%",
+					borderRadius: "none",
+					rotateX: 0,
+					rotateY: 0,
+					onComplete: () => {
+						if (nextVideoButton) {
+							nextVideoButton.disabled = false;
+						}
+						// Pause previously expanded video after next video is expanded
+						if (videoElementInExpandedVideo) {
+							videoElementInExpandedVideo.pause();
+							videoElementInExpandedVideo.currentTime = 0;
+						}
 
-				// Hide swap button
-				tl.set(swapButtonVideoRef.current, {
-					visibility:
-						BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_VISIBILITY_FROM,
-				})
-					// Expand next background video
-					.fromTo(
-						nextBackgroundVideoRef.current,
-						{
-							opacity:
-								BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BACKGROUND_OPACITY_FROM,
-							zIndex:
-								BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BACKGROUND_Z_INDEX_FROM,
-						},
-						{
-							ease: "power2.inOut",
-							duration:
-								BACKGROUND_VIDEO_ANIMATION_CONFIG.DURATION.BACKGROUND_EXPAND,
-							width: BACKGROUND_VIDEO_ANIMATION_CONFIG.SIZE.FULL,
-							height: BACKGROUND_VIDEO_ANIMATION_CONFIG.SIZE.FULL,
-							borderRadius:
-								BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE
-									.BACKGROUND_BORDER_RADIUS_TO,
-							// Update current background & swap button video src
-							onComplete: () => {
-								if (
-									currentBackgroundVideoRef.current &&
-									swapButtonVideoRef.current
-								) {
-									currentBackgroundVideoRef.current.src = getVideoSrc(
-										heroVideosNumber[(videoIndex.current + 1) % totalHeroVideos]
-									);
-
-									swapButtonVideoRef.current.src = getVideoSrc(
-										heroVideosNumber[(videoIndex.current + 2) % totalHeroVideos]
-									);
-								}
-							},
-						},
-						`0`
-					)
-					// Collapse next background video
-					.to(
-						nextBackgroundVideoRef.current,
-						{
-							ease: "power1.inOut",
-							duration:
-								BACKGROUND_VIDEO_ANIMATION_CONFIG.DURATION.BACKGROUND_RESET,
-							opacity:
-								BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BACKGROUND_OPACITY_TO,
-							zIndex:
-								BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BACKGROUND_Z_INDEX_TO,
-							width: BACKGROUND_VIDEO_ANIMATION_CONFIG.SIZE.MINI,
-							height: BACKGROUND_VIDEO_ANIMATION_CONFIG.SIZE.MINI,
-							// Update next background video src
-							onComplete: () => {
-								if (nextBackgroundVideoRef.current) {
-									nextBackgroundVideoRef.current.src = getVideoSrc(
-										heroVideosNumber[(videoIndex.current + 2) % totalHeroVideos]
-									);
-								}
-							},
-						},
-						`>+=1.3`
-					)
-					// Expand swap button
-					.fromTo(
-						swapButtonVideoRef.current,
-						{
-							opacity:
-								BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_OPACITY_FROM,
-							scale: BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_SCALE_FROM,
-							zIndex: BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_Z_INDEX_FROM,
-							visibility:
-								BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_VISIBILITY_TO,
-						},
-						{
-							onStart: () => {
-								if (swapButtonRef.current) {
-									swapButtonRef.current.disabled = false;
-								}
-
-								videoIndex.current = (videoIndex.current + 1) % totalHeroVideos;
-							},
-
-							ease: "elastic.inOut",
-							duration: BACKGROUND_VIDEO_ANIMATION_CONFIG.DURATION.BUTTON_EXPAND,
-							width: BACKGROUND_VIDEO_ANIMATION_CONFIG.SIZE.MINI,
-							height: BACKGROUND_VIDEO_ANIMATION_CONFIG.SIZE.MINI,
-							opacity: BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_OPACITY_TO,
-							scale: BACKGROUND_VIDEO_ANIMATION_CONFIG.STATE.BUTTON_SCALE_TO,
-						},
-						`>`
-					);
+						setCurrentVideoIndex(
+							(videoIndex) => (videoIndex + 1) % totalHeroVideos
+						);
+					},
+				});
 
 				tl.play();
 			});
 
-			const buttonVideo = swapButtonRef.current;
-			buttonVideo?.addEventListener("click", handleHeroMiniVideoClick);
+			nextVideoButton?.addEventListener("click", handleHeroMiniVideoClick);
 
 			return () => {
-				buttonVideo?.removeEventListener("click", handleHeroMiniVideoClick);
+				nextVideoButton?.removeEventListener("click", handleHeroMiniVideoClick);
 				tl.kill();
 			};
 		},
 		{
 			scope: gsapScope,
+			dependencies: [gsapScope, currentVideoIndex],
+			revertOnUpdate: true,
 		}
 	);
 
-	useGSAP(() => {
-		if (!gsapScope?.current) return;
+	// useGSAP(() => {
+	// 	if (!gsapScope?.current) return;
 
-		const tl = gsap.timeline({ paused: true });
+	// 	const tl = gsap.timeline({ paused: true });
 
-		tl
-			// .set(gsapScope?.current, {
-			// 	clipPath: "polygon(12% 0, 78% 0, 95% 90%, 0 100%)",
-			// 	borderRadius: "0% 0% 40% 5%",
-			// })
-			.to(gsapScope?.current, {
-				// clipPath: "polygon(0% 0, 100% 100%, 100% 100%, 100% 100%)",
-				// borderRadius: "0% 0% 0% 0%",
-				clipPath: "polygon(12% 0, 78% 0, 95% 90%, 0 100%)",
-				borderRadius: "0% 0% 40% 5%",
-				ease: "power1.inOut",
-				scrollTrigger: {
-					trigger: gsapScope?.current,
-					start: "center center",
-					end: "bottom center",
-					scrub: true,
-				},
-			});
+	// 	tl
+	// 		// .set(gsapScope?.current, {
+	// 		// 	clipPath: "polygon(12% 0, 78% 0, 95% 90%, 0 100%)",
+	// 		// 	borderRadius: "0% 0% 40% 5%",
+	// 		// })
+	// 		.to(gsapScope?.current, {
+	// 			// clipPath: "polygon(0% 0, 100% 100%, 100% 100%, 100% 100%)",
+	// 			// borderRadius: "0% 0% 0% 0%",
+	// 			clipPath: "polygon(12% 0, 78% 0, 95% 90%, 0 100%)",
+	// 			borderRadius: "0% 0% 40% 5%",
+	// 			ease: "power1.inOut",
+	// 			scrollTrigger: {
+	// 				trigger: gsapScope?.current,
+	// 				start: "center center",
+	// 				end: "bottom center",
+	// 				scrub: true,
+	// 			},
+	// 		});
 
-		return () => {
-			tl.kill();
-		};
-	});
+	// 	return () => {
+	// 		tl.kill();
+	// 	};
+	// });
+
+	const videoButtonStyle =
+		"size-44 z-50 rounded-xl border-2 border-bbsu-black-700 opacity-70 hover:opacity-100 transition-opacity duration-300 ease-in-out button-appearance";
+	const expandedVideoStyle =
+		"size-full z-10 border-2 border-transparent [transform:rotateX(0deg)_rotateY(0deg)]";
+	const hiddenVideoStyle = `${videoButtonStyle} z-0 hidden`;
 
 	return (
-		<div className="place-items-center grid w-screen h-screen">
-			<div className="z-50 absolute mask-clip-path rounded-lg overflow-hidden size-64">
-				<button
-					ref={swapButtonRef}
-					type="button"
-					aria-label="change background video"
-					className="opacity-70 hover:opacity-100 transition-all duration-500 overflow-hidden ease-in hover:scale-100 object-cover scale-50 size-64"
-				>
-					<video
-						loop
-						muted
-						aria-label="short clips of gameplay of random computer games"
-						onLoadedData={checkIsAllVideosLoaded}
-						ref={swapButtonVideoRef}
-						src={getVideoSrc(
-							heroVideosNumber[(videoIndex.current + 1) % totalHeroVideos]
-						)}
-						className="border-4 border-bbsu-blue-75 rounded-3xl origin-center object-cover size-full"
-					/>
-				</button>
-			</div>
-			<video
-				loop
-				muted
-				autoPlay
-				aria-label="short clips of gameplay of random computer games"
-				onLoadedData={checkIsAllVideosLoaded}
-				src={getVideoSrc(
-					heroVideosNumber[(videoIndex.current + 1) % totalHeroVideos]
-				)}
-				className="z-20 absolute opacity-0 rounded-xl object-center object-cover size-64"
-				ref={nextBackgroundVideoRef}
-			/>
-			<video
-				loop
-				muted
-				autoPlay
-				aria-label="short clips of gameplay of random computer games"
-				onLoadedData={syncVideoOnLoaded}
-				src={getVideoSrc(heroVideosNumber[videoIndex.current])}
-				className="absolute object-center object-cover size-full"
-				ref={currentBackgroundVideoRef}
-			/>
-			<video
-				muted
-				autoPlay
-				hidden
-				onLoadedData={checkIsAllVideosLoaded}
-				src={getVideoSrc(
-					heroVideosNumber[(videoIndex.current + 2) % totalHeroVideos]
-				)}
-			/>
-			<video
-				muted
-				autoPlay
-				hidden
-				onLoadedData={checkIsAllVideosLoaded}
-				src={getVideoSrc(
-					heroVideosNumber[(videoIndex.current + 3) % totalHeroVideos]
-				)}
-			/>
+		<div
+			className="video-elements-container place-items-center grid w-screen h-screen absolute [perspective:1000px]"
+			onMouseMove={handleMouseMove}
+		>
+			{heroVideosNumber.map((videoNumber) => {
+				const isExpanded = videoNumber === heroVideosNumber[currentVideoIndex];
+				const isButton = videoNumber === heroVideosNumber[nextVideoIndex];
+
+				let styles = hiddenVideoStyle;
+
+				if (isExpanded) {
+					styles = expandedVideoStyle;
+				}
+
+				if (isButton) {
+					styles = videoButtonStyle;
+				}
+
+				return (
+					<button
+						key={videoNumber}
+						id={`video-${videoNumber}`}
+						data-is-button={isButton}
+						data-is-expanded={isExpanded}
+						type="button"
+						aria-label="change background video"
+						className={`hover-3d-effect absolute overflow-hidden ${styles}`}
+					>
+						<video
+							muted
+							autoPlay={isExpanded}
+							loop
+							onLoadedData={checkIsAllVideosLoaded}
+							src={`/videos/hero-${videoNumber}.mp4`}
+							className="object-center object-cover size-full"
+						/>
+					</button>
+				);
+			})}
 		</div>
 	);
 };
