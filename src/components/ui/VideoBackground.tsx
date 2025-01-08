@@ -45,11 +45,15 @@ export const VideoBackground = ({
 		const xPercentage = x / buttonRect.width;
 		const yPercentage = y / buttonRect.height;
 
-		const xRotation = (xPercentage - 0.5) * 7;
-		const yRotation = (0.5 - yPercentage) * 7;
+		let xRotation = (xPercentage - 0.5) * 10;
+		let yRotation = (0.5 - yPercentage) * 10;
+		// Maximum rotation is 25 degrees
+		xRotation = Math.abs(xRotation) > 25 ? 25 * Math.sign(xRotation) : xRotation;
+		yRotation = Math.abs(yRotation) > 25 ? 25 * Math.sign(yRotation) : yRotation;
 
 		videoButton.style.setProperty("--x-rotation", `${yRotation}deg`);
 		videoButton.style.setProperty("--y-rotation", `${xRotation}deg`);
+		// It's for the glare
 		videoButton.style.setProperty("--x", `${xPercentage * 80}%`);
 		videoButton.style.setProperty("--y", `${yPercentage * 60}%`);
 	};
@@ -80,36 +84,42 @@ export const VideoBackground = ({
 				}
 
 				// Expand next background video
-				tl.to(nextVideoButton, {
-					onstart: async () => {
-						// Play expanding video from the beginning
-						if (videoElementInNextVideoButton) {
-							videoElementInNextVideoButton.currentTime = 0;
-							await videoElementInNextVideoButton.play();
-						}
+				tl.fromTo(
+					nextVideoButton,
+					{
+						onstart: async () => {
+							// Play expanding video from the beginning
+							if (videoElementInNextVideoButton) {
+								videoElementInNextVideoButton.currentTime = 0;
+								await videoElementInNextVideoButton.play();
+							}
+						},
+						opacity: 1,
 					},
-					ease: "power2.inOut",
-					duration: 1,
-					width: "100%",
-					height: "100%",
-					borderRadius: "none",
-					rotateX: 0,
-					rotateY: 0,
-					onComplete: () => {
-						if (nextVideoButton) {
-							nextVideoButton.disabled = false;
-						}
-						// Pause previously expanded video after next video is expanded
-						if (videoElementInExpandedVideo) {
-							videoElementInExpandedVideo.pause();
-							videoElementInExpandedVideo.currentTime = 0;
-						}
+					{
+						ease: "power2.inOut",
+						duration: 1,
+						width: "100%",
+						height: "100%",
+						borderRadius: "none",
+						rotateX: 0,
+						rotateY: 0,
+						onComplete: () => {
+							if (nextVideoButton) {
+								nextVideoButton.disabled = false;
+							}
+							// Pause previously expanded video after next video is expanded
+							if (videoElementInExpandedVideo) {
+								videoElementInExpandedVideo.pause();
+								videoElementInExpandedVideo.currentTime = 0;
+							}
 
-						setCurrentVideoIndex(
-							(videoIndex) => (videoIndex + 1) % totalHeroVideos
-						);
-					},
-				});
+							setCurrentVideoIndex(
+								(videoIndex) => (videoIndex + 1) % totalHeroVideos
+							);
+						},
+					}
+				);
 
 				tl.play();
 			});
