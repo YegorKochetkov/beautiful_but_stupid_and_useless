@@ -8,7 +8,7 @@ export function Hero() {
 	const heroComponent = React.useRef<HTMLDivElement>(null);
 	const [allVideosLoaded, setAllVideosLoaded] = React.useState(false);
 
-	const styleToPreventContentSplash = { opacity: allVideosLoaded ? 1 : 0 };
+	const hideContentWhileVideosLoading = { opacity: allVideosLoaded ? 1 : 0 };
 
 	return (
 		<div
@@ -16,7 +16,7 @@ export function Hero() {
 			className="relative w-screen h-dvh overflow-x-hidden"
 		>
 			{allVideosLoaded ? null : <Loader />}
-			<div style={styleToPreventContentSplash}>
+			<div style={hideContentWhileVideosLoading}>
 				<div
 					id="video-frame"
 					className="relative bg-bbsu-blue-75 w-screen h-dvh overflow-hidden"
@@ -29,7 +29,7 @@ export function Hero() {
 					<HeroHeader />
 					<WatchTrailerButton />
 				</div>
-				<DecorativeElements />
+				<DecorativeElement />
 			</div>
 		</div>
 	);
@@ -80,7 +80,7 @@ function Loader() {
 	);
 }
 
-function DecorativeElements() {
+function DecorativeElement() {
 	return (
 		<span
 			aria-hidden
