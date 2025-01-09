@@ -29,9 +29,9 @@ export const VideoBackground = ({
 	const [currentVideoIndex, setCurrentVideoIndex] = React.useState(0);
 	const nextVideoIndex = (currentVideoIndex + 1) % totalHeroVideos;
 
-	// 3-d effect for the video button
-	const handleMouseMove = (ev: React.MouseEvent<HTMLDivElement>) => {
-		const videoButton = ev.currentTarget.querySelector<HTMLButtonElement>(
+	// 3-d tilt effect for the video button
+	const handleMouseMove = (ev: MouseEvent) => {
+		const videoButton = document.querySelector<HTMLButtonElement>(
 			'button[data-is-button="true"]'
 		);
 
@@ -57,6 +57,11 @@ export const VideoBackground = ({
 		videoButton.style.setProperty("--x", `${xPercentage * 80}%`);
 		videoButton.style.setProperty("--y", `${yPercentage * 60}%`);
 	};
+
+	React.useEffect(() => {
+		document.addEventListener("mousemove", handleMouseMove);
+		return () => document.removeEventListener("mousemove", handleMouseMove);
+	});
 
 	useGSAP(
 		(_context, contextSafe) => {
@@ -174,10 +179,7 @@ export const VideoBackground = ({
 	const hiddenVideoStyle = `${videoButtonStyle} z-0 hidden`;
 
 	return (
-		<div
-			className="video-elements-container place-items-center grid w-screen h-screen absolute [perspective:1000px]"
-			onMouseMove={handleMouseMove}
-		>
+		<div className="video-elements-container place-items-center grid w-screen h-screen absolute [perspective:1000px]">
 			{heroVideosNumber.map((videoNumber) => {
 				const isExpanded = videoNumber === heroVideosNumber[currentVideoIndex];
 				const isButton = videoNumber === heroVideosNumber[nextVideoIndex];
