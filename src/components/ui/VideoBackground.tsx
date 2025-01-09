@@ -92,11 +92,15 @@ export const VideoBackground = ({
 				tl.fromTo(
 					nextVideoButton,
 					{
-						onstart: async () => {
+						onstart: () => {
 							// Play expanding video from the beginning
 							if (videoElementInNextVideoButton) {
 								videoElementInNextVideoButton.currentTime = 0;
-								await videoElementInNextVideoButton.play();
+								videoElementInNextVideoButton
+									.play()
+									.catch((err) =>
+										console.warn("Error start playing video: ", err)
+									);
 							}
 						},
 						opacity: 1,
