@@ -84,7 +84,7 @@ function DecorativeElements() {
 	return (
 		<span
 			aria-hidden
-			className="right-5 sm:right-10 bottom-5 absolute font-black font-zentry-regular text-5xl text-bbsu-black-700 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase special-font"
+			className="right-5 -z-10 sm:right-10 bottom-5 absolute font-black font-zentry-regular text-5xl text-bbsu-black-700 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase special-font"
 		>
 			<span>u</span>seless
 		</span>
