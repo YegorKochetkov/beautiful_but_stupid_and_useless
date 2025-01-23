@@ -59,8 +59,13 @@ export const VideoBackground = ({
 	};
 
 	React.useEffect(() => {
-		document.addEventListener("mousemove", handleMouseMove);
-		return () => document.removeEventListener("mousemove", handleMouseMove);
+		const mouseMoveController = new AbortController();
+
+		document.addEventListener("mousemove", handleMouseMove, {
+			signal: mouseMoveController.signal,
+		});
+
+		return () => mouseMoveController.abort();
 	});
 
 	useGSAP(
@@ -133,10 +138,14 @@ export const VideoBackground = ({
 				tl.play();
 			});
 
-			nextVideoButton?.addEventListener("click", handleHeroMiniVideoClick);
+			const nextVideoButtonController = new AbortController();
+
+			nextVideoButton?.addEventListener("click", handleHeroMiniVideoClick, {
+				signal: nextVideoButtonController.signal,
+			});
 
 			return () => {
-				nextVideoButton?.removeEventListener("click", handleHeroMiniVideoClick);
+				nextVideoButtonController.abort();
 				tl.kill();
 			};
 		},
