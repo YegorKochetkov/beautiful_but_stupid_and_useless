@@ -1,14 +1,40 @@
 import React from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TiLocationArrow } from "react-icons/ti";
 
 import { Button } from "./ui/Button";
 import { VideoBackground } from "./ui/VideoBackground";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function Hero() {
 	const heroComponent = React.useRef<HTMLDivElement>(null);
 	const [allVideosLoaded, setAllVideosLoaded] = React.useState(false);
 
 	const hideContentWhileVideosLoading = { opacity: allVideosLoaded ? 1 : 0 };
+
+	useGSAP(() => {
+		const tl = gsap.timeline({ paused: true });
+
+		tl.from("#video-frame", {
+			clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+		});
+		tl.to("#video-frame", {
+			clipPath: "polygon(0% 0%, 50% 0%, 100% 70%, 70% 100%, 0% 50%)",
+			ease: "power1.inOut",
+			scrollTrigger: {
+				trigger: "#video-frame",
+				start: "center center",
+				scrub: true,
+			},
+		});
+
+		return () => {
+			tl.kill();
+		};
+	});
 
 	return (
 		<div

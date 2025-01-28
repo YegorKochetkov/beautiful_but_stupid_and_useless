@@ -156,35 +156,6 @@ export const VideoBackground = ({
 		}
 	);
 
-	// useGSAP(() => {
-	// 	if (!gsapScope?.current) return;
-
-	// 	const tl = gsap.timeline({ paused: true });
-
-	// 	tl
-	// 		// .set(gsapScope?.current, {
-	// 		// 	clipPath: "polygon(12% 0, 78% 0, 95% 90%, 0 100%)",
-	// 		// 	borderRadius: "0% 0% 40% 5%",
-	// 		// })
-	// 		.to(gsapScope?.current, {
-	// 			// clipPath: "polygon(0% 0, 100% 100%, 100% 100%, 100% 100%)",
-	// 			// borderRadius: "0% 0% 0% 0%",
-	// 			clipPath: "polygon(12% 0, 78% 0, 95% 90%, 0 100%)",
-	// 			borderRadius: "0% 0% 40% 5%",
-	// 			ease: "power1.inOut",
-	// 			scrollTrigger: {
-	// 				trigger: gsapScope?.current,
-	// 				start: "center center",
-	// 				end: "bottom center",
-	// 				scrub: true,
-	// 			},
-	// 		});
-
-	// 	return () => {
-	// 		tl.kill();
-	// 	};
-	// });
-
 	const videoButtonStyle =
 		"size-44 z-50 rounded-xl border-2 border-bbsu-black-700 opacity-70 hover:opacity-100 transition-opacity duration-300 ease-in-out button-appearance";
 	const expandedVideoStyle =
