@@ -42,7 +42,11 @@ export function Hero() {
 			className="relative w-screen h-dvh overflow-x-hidden"
 		>
 			{allVideosLoaded ? null : <Loader />}
-			<div style={hideContentWhileVideosLoading}>
+			<div
+				style={hideContentWhileVideosLoading}
+				// @ts-expect-error TS2322: LOL React doesn't know 'inert' is a valid attribute
+				inert={!allVideosLoaded}
+			>
 				<div
 					id="video-frame"
 					className="relative bg-bbsu-blue-75 w-screen h-dvh overflow-hidden"
