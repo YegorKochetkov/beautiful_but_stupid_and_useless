@@ -13,15 +13,16 @@ export function Hero() {
 	const heroComponent = React.useRef<HTMLDivElement>(null);
 	const [allVideosLoaded, setAllVideosLoaded] = React.useState(false);
 
-	const hideContentWhileVideosLoading = { opacity: allVideosLoaded ? 1 : 0 };
+	const hideContentWhileVideosLoading = allVideosLoaded
+		? "opacity-100"
+		: "opacity-0";
 
 	useGSAP(() => {
 		const tl = gsap.timeline({ paused: true });
 
 		tl.from("#video-frame", {
 			clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-		});
-		tl.to("#video-frame", {
+		}).to("#video-frame", {
 			clipPath: "polygon(0% 0%, 50% 0%, 100% 70%, 70% 100%, 0% 50%)",
 			ease: "power1.inOut",
 			scrollTrigger: {
@@ -43,7 +44,7 @@ export function Hero() {
 		>
 			{allVideosLoaded ? null : <Loader />}
 			<div
-				style={hideContentWhileVideosLoading}
+				className={hideContentWhileVideosLoading}
 				// @ts-expect-error TS2322: LOL React doesn't know 'inert' is a valid attribute
 				inert={!allVideosLoaded}
 			>
