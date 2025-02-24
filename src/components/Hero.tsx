@@ -35,7 +35,7 @@ export function Hero() {
 		return () => {
 			tl.kill();
 		};
-	});
+	}, []);
 
 	return (
 		<div
@@ -73,11 +73,11 @@ function HeroHeader() {
 				<span className="relative">
 					<span className="special-font">
 						Be<span>au</span>tif<span>u</span>l
-					</span>{" "}
+					</span>
 					<span className="-bottom-5 sm:-bottom-6 md:-bottom-7 lg:-bottom-9 left-0 absolute font-robert-regular text-bbsu-blue-100 text-lg sm:text-2xl md:text-4xl lg:text-5xl">
 						but stupid and
 					</span>
-				</span>{" "}
+				</span>
 				<span className="right-5 sm:right-10 bottom-5 z-40 absolute font-black font-zentry-regular text-5xl text-bbsu-blue-75 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase special-font">
 					<span>u</span>seless
 				</span>

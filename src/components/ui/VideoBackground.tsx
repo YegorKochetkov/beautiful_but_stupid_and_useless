@@ -88,6 +88,7 @@ export const VideoBackground = ({
 
 			const handleHeroMiniVideoClick = contextSafe(() => {
 				tl.clear();
+
 				// Prevent user click while next video is expanding
 				if (nextVideoButton) {
 					nextVideoButton.disabled = true;
