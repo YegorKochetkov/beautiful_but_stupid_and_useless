@@ -44,6 +44,13 @@ body {
 		clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 	}
 
+	.animated-word {
+		@apply opacity-0;
+		transform: translate3d(10px, 50px, -60px) rotateY(-60deg) rotateX(-40deg);
+		transform-origin: 50% 50% -130px;
+		will-change: opacity, transform;
+	}
+
 	.special-font span {
 		font-family: "Zentry-regular";
 		font-feature-settings: "ss01" on;

@@ -2,7 +2,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import { AnimatedTitle } from "./ui/AnimatedText";
+import { AnimatedText } from "./ui/AnimatedText";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,7 +12,7 @@ export function About() {
 			scrollTrigger: {
 				trigger: "#clip-image",
 				start: "center center",
-				end: "bottom center",
+				end: "bottom top",
 				scrub: 0.5,
 				pin: true,
 				pinSpacing: true,
@@ -33,13 +33,17 @@ export function About() {
 	return (
 		<div id="about" className="w-screen min-h-screen bg-bbsu-blue-75">
 			<div className="relative mb-8 mt-36 flex flex-col items-center gap-5">
-				<h2 className="text-xl uppercase md:text-3xl text-center">
+				<h2 className="text-xl md:text-3xl xl:text-4xl px-4 mb-5 uppercase text-center">
 					Почему &rdquo;красивые&ldquo; сайты на самом деле <b>не</b> продают?
 				</h2>
 
-				<AnimatedTitle />
+				<AnimatedText
+					text="Вернее сказать, что на самом деле продают <br />нe &rdquo;красивые&ldquo; сайты, a хорошо продуманные."
+					containerClass="font-black uppercase text-2xl md:text-4xl xl:text-5xl flex gap-3 px-4"
+					textClass="flex gap-3 justify-center"
+				/>
 
-				<div className="absolute -bottom-[80dvh] w-full max-w-96 text-center font-circular-web text-xl md:max-w-[34rem] md:text-2xl">
+				<div className="absolute -bottom-[80dvh] w-full max-w-96 text-center font-circular-web text-xl md:max-w-[34rem] md:text-2xl z-30">
 					<p>
 						Практика показывает, что красивые дизайнерские решения не всегда
 						приносят больше продаж, чем просто удобные, быстрые и функциональные.
