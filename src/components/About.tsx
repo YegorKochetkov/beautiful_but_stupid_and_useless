@@ -34,19 +34,19 @@ export function About() {
 		<div id="about" className="w-screen min-h-screen bg-bbsu-blue-75">
 			<div className="relative mb-8 mt-36 flex flex-col items-center gap-5">
 				<h2 className="text-xl md:text-3xl xl:text-4xl px-4 mb-5 uppercase text-center">
-					Почему &rdquo;красивые&ldquo; сайты на самом деле <b>не</b> продают?
+					Why don&apos;t &rdquo;pretty&ldquo; websites actually sell?
 				</h2>
 
 				<AnimatedText
-					text="Вернее сказать, что на самом деле продают <br />нe &rdquo;красивые&ldquo; сайты, a хорошо продуманные."
-					containerClass="font-black uppercase text-2xl md:text-4xl xl:text-5xl flex gap-3 px-4"
+					text="It is not the visually appealing websites that drive sales, <br />but rather those that are thoughtfully designed"
+					containerClass="font-black uppercase text-3xl md:text-4xl xl:text-5xl flex gap-3 px-4"
 					textClass="flex gap-3 justify-center"
 				/>
 
 				<div className="absolute -bottom-[80dvh] w-full max-w-96 text-center font-circular-web text-xl md:max-w-[34rem] md:text-2xl z-30">
 					<p>
-						Практика показывает, что красивые дизайнерские решения не всегда
-						приносят больше продаж, чем просто удобные, быстрые и функциональные.
+						Practice shows that beautiful design solutions do not always bring in
+						more sales than simply convenient, fast, and functional ones.
 					</p>
 
 					{/* <p className="text-gray-500">
