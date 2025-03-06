@@ -13,10 +13,6 @@ export function Hero() {
 	const heroComponent = React.useRef<HTMLDivElement>(null);
 	const [allVideosLoaded, setAllVideosLoaded] = React.useState(false);
 
-	const hideContentWhileVideosLoading = allVideosLoaded
-		? "opacity-100"
-		: "opacity-0";
-
 	useGSAP(() => {
 		const tl = gsap.timeline({ paused: true });
 
@@ -42,25 +38,35 @@ export function Hero() {
 			ref={heroComponent}
 			className="relative w-screen h-dvh overflow-x-hidden"
 		>
-			{allVideosLoaded ? null : <Loader />}
+			<Loader hide={allVideosLoaded} />
+
+			<HeroContent>
+				<VideoBackground
+					gsapScope={heroComponent}
+					onAllVideosLoaded={setAllVideosLoaded}
+					allVideosLoaded={allVideosLoaded}
+				/>
+				<HeroHeader />
+				<WatchTrailerButton />
+			</HeroContent>
+
+			<DecorativeElement />
+		</div>
+	);
+}
+
+type HeroContentProps = React.HTMLAttributes<HTMLDivElement> & {
+	children: React.ReactNode;
+};
+
+function HeroContent({ children, ...props }: HeroContentProps) {
+	return (
+		<div {...props}>
 			<div
-				className={hideContentWhileVideosLoading}
-				// @ts-expect-error TS2322: LOL React doesn't know 'inert' is a valid attribute
-				inert={!allVideosLoaded}
+				id="video-frame"
+				className="relative bg-bbsu-blue-75 w-screen h-dvh overflow-hidden"
 			>
-				<div
-					id="video-frame"
-					className="relative bg-bbsu-blue-75 w-screen h-dvh overflow-hidden"
-				>
-					<VideoBackground
-						gsapScope={heroComponent}
-						onAllVideosLoaded={setAllVideosLoaded}
-						allVideosLoaded={allVideosLoaded}
-					/>
-					<HeroHeader />
-					<WatchTrailerButton />
-				</div>
-				<DecorativeElement />
+				{children}
 			</div>
 		</div>
 	);
@@ -68,7 +74,7 @@ export function Hero() {
 
 function HeroHeader() {
 	return (
-		<div className="mt-12 px-5 sm:px-10">
+		<div className="mt-24 px-5 sm:px-10">
 			<h1 className="sm:right-10 font-black font-zentry-regular text-5xl text-bbsu-blue-100 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase">
 				<span className="relative">
 					<span className="special-font">
@@ -78,7 +84,7 @@ function HeroHeader() {
 						but stupid and
 					</span>
 				</span>
-				<span className="right-5 sm:right-10 bottom-5 z-40 absolute font-black font-zentry-regular text-5xl text-bbsu-blue-75 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase special-font">
+				<span className="right-10 sm:right-14 bottom-5 z-40 absolute font-black font-zentry-regular text-5xl text-bbsu-blue-75 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase special-font">
 					<span>u</span>seless
 				</span>
 			</h1>
@@ -88,7 +94,7 @@ function HeroHeader() {
 
 function WatchTrailerButton() {
 	return (
-		<div className="top-36 sm:top-44 md:top-60 lg:top-[22rem] left-5 sm:left-10 absolute">
+		<div className="top-48 sm:top-56 md:top-72 lg:top-[24rem] left-5 sm:left-10 absolute">
 			<Button
 				id="watch-trailer"
 				leftIcon={<TiLocationArrow />}
@@ -100,7 +106,9 @@ function WatchTrailerButton() {
 	);
 }
 
-function Loader() {
+function Loader({ hide }: { hide: boolean }) {
+	if (hide) return null;
+
 	return (
 		<div
 			id="loader"
@@ -115,7 +123,7 @@ function DecorativeElement() {
 	return (
 		<span
 			aria-hidden
-			className="right-5 -z-10 sm:right-10 bottom-5 absolute font-black font-zentry-regular text-5xl text-bbsu-black-700 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase special-font"
+			className="right-10 sm:right-14 bottom-5 -z-10 absolute font-black font-zentry-regular text-5xl text-bbsu-black-700 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase special-font"
 		>
 			<span>u</span>seless
 		</span>
