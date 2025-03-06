@@ -2,6 +2,8 @@ import React from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
+const heroVideosNumber = [1, 2, 3, 4] as const;
+
 export const VideoBackground = ({
 	gsapScope,
 	onAllVideosLoaded,
@@ -11,7 +13,6 @@ export const VideoBackground = ({
 	onAllVideosLoaded: React.Dispatch<React.SetStateAction<boolean>>;
 	allVideosLoaded: boolean;
 }) => {
-	const heroVideosNumber = [1, 2, 3, 4] as const;
 	const totalHeroVideos = heroVideosNumber.length;
 
 	// Loader is shown while all videos are not loaded
