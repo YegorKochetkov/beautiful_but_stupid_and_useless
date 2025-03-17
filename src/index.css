@@ -44,6 +44,31 @@ body {
 		clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 	}
 
+	.special-font span {
+		font-family: "Zentry-regular";
+		font-feature-settings: "ss01" on;
+	}
+
+	.hover-3d-effect {
+		@apply [transform:rotateX(var(--x-rotation))_rotateY(var(--y-rotation))]
+			after:content-[""] after:absolute
+			after:inset-0 after:pointer-events-none
+			after:bg-[radial-gradient(at_var(--x)_var(--y),rgba(255,255,255,0.2)_10%,transparent_70%)];
+	}
+}
+
+@layer components {
+	.button-appearance {
+		animation: show 0.5s ease-in-out;
+	}
+	@keyframes show {
+		from {
+			opacity: 0;
+			width: 0;
+			height: 0;
+		}
+	}
+
 	.animated-word {
 		@apply opacity-0;
 		transform: translate3d(10px, 50px, -60px) rotateY(-60deg) rotateX(-40deg);
@@ -51,17 +76,21 @@ body {
 		will-change: opacity, transform;
 	}
 
-	.special-font span {
-		font-family: "Zentry-regular";
-		font-feature-settings: "ss01" on;
+	.navbar-scrolled {
+		background: rgba(0, 0, 0, 0.7);
+		-webkit-backdrop-filter: blur(10px);
+		backdrop-filter: blur(10px);
+		transition: background 0.3s ease;
 	}
 
 	.default-button,
-	.promo-button {
-		@apply flex justify-center items-center gap-1 bg-violet-50 py-3 text-black text-xs sm:text-sm md:text-base lg:text-lg uppercase font-roboto-mono [&_span]:text-base sm:[&_span]:text-lg md:[&_span]:text-xl lg:[&_span]:text-2xl px-4 sm:px-7 w-fit relative cursor-pointer rounded-full;
+	.promo-button,
+	.nav-button {
+		@apply flex justify-center items-center gap-1 bg-violet-50 py-3 px-4 sm:px-7 text-black text-sm sm:text-base md:text-lg lg:text-xl uppercase font-roboto-mono [&_span]:text-base sm:[&_span]:text-lg md:[&_span]:text-xl lg:[&_span]:text-2xl w-fit relative cursor-pointer rounded-full;
 	}
 	.default-button span,
-	.promo-button span {
+	.promo-button span,
+	.nav-button span {
 		@apply transition-transform;
 	}
 	.default-button:hover span,
@@ -69,12 +98,19 @@ body {
 	.default-button:active span,
 	.promo-button:active span,
 	.default-button:focus-within span,
-	.promo-button:focus-within span {
+	.promo-button:focus-within span,
+	.nav-button:hover span,
+	.nav-button:active span,
+	.nav-button:focus-within span {
 		@apply rotate-45;
 	}
 	.promo-button {
 		@apply bg-bbsu-yellow-300 text-bbsu-black-700;
 	}
+	.nav-button {
+		@apply py-1 px-5 bg-blue-50 hidden text-sm sm:text-base [&_span]:text-lg sm:[&_span]:text-lg md:[&_span]:text-lg lg:[&_span]:text-lg;
+	}
+
 	/* HTML: <div class="loader"></div> */
 	.loader {
 		width: fit-content;
@@ -95,30 +131,32 @@ body {
 		-webkit-background-clip: text;
 		background-clip: text;
 	}
-
 	@keyframes l24 {
 		100% {
 			background-position: left;
 		}
 	}
-}
 
-@layer components {
-	.hover-3d-effect {
-		@apply [transform:rotateX(var(--x-rotation))_rotateY(var(--y-rotation))]
-			after:content-[""] after:absolute
-			after:inset-0 after:pointer-events-none
-			after:bg-[radial-gradient(at_var(--x)_var(--y),rgba(255,255,255,0.2)_10%,transparent_70%)];
+	.indicator-line {
+		@apply h-3 w-1 rounded-full bg-white transition-all duration-200 ease-in-out;
 	}
-
-	.button-appearance {
-		animation: show 0.5s ease-in-out;
+	.indicator-line.active {
+		--animation-order: 1;
+		animation: indicator-line 0.5s ease infinite;
+		animation-delay: calc(var(--animation-order) * 0.1s);
 	}
-	@keyframes show {
-		from {
-			opacity: 0;
-			width: 0;
-			height: 0;
+	@keyframes indicator-line {
+		0% {
+			height: 4px;
+			transform: translateY(-0px);
+		}
+		50% {
+			height: 16px;
+			transform: translateY(-4px);
+		}
+		100% {
+			height: 4px;
+			transform: translateY(-0px);
 		}
 	}
 }
