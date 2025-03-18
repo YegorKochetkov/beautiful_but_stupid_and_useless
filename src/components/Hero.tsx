@@ -7,6 +7,8 @@ import { TiLocationArrow } from "react-icons/ti";
 import { Button } from "./ui/Button";
 import { VideoBackground } from "./ui/VideoBackground";
 
+import { cn } from "../lib/utils";
+
 gsap.registerPlugin(ScrollTrigger);
 
 export function Hero() {
@@ -98,7 +100,7 @@ function WatchTrailerButton() {
 			<Button
 				id="watch-trailer"
 				leftIcon={<TiLocationArrow />}
-				className="promo-button"
+				className={cn("button", "promo-button")}
 			>
 				Watch trailer
 			</Button>

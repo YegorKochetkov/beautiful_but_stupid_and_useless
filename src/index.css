@@ -58,7 +58,7 @@ body {
 }
 
 @layer components {
-	.button-appearance {
+	.button-with-video-appearance {
 		animation: show 0.5s ease-in-out;
 	}
 	@keyframes show {
@@ -83,32 +83,22 @@ body {
 		transition: background 0.3s ease;
 	}
 
-	.default-button,
-	.promo-button,
-	.nav-button {
+	.button {
 		@apply flex justify-center items-center gap-1 bg-violet-50 py-3 px-4 sm:px-7 text-black text-sm sm:text-base md:text-lg lg:text-xl uppercase font-roboto-mono [&_span]:text-base sm:[&_span]:text-lg md:[&_span]:text-xl lg:[&_span]:text-2xl w-fit relative cursor-pointer rounded-full;
 	}
-	.default-button span,
-	.promo-button span,
-	.nav-button span {
+	.button span {
 		@apply transition-transform;
 	}
-	.default-button:hover span,
-	.promo-button:hover span,
-	.default-button:active span,
-	.promo-button:active span,
-	.default-button:focus-within span,
-	.promo-button:focus-within span,
-	.nav-button:hover span,
-	.nav-button:active span,
-	.nav-button:focus-within span {
+	.button:hover span,
+	.button:active span,
+	.button:focus-within span {
 		@apply rotate-45;
 	}
 	.promo-button {
 		@apply bg-bbsu-yellow-300 text-bbsu-black-700;
 	}
 	.nav-button {
-		@apply py-1 px-5 bg-blue-50 hidden text-sm sm:text-base [&_span]:text-lg sm:[&_span]:text-lg md:[&_span]:text-lg lg:[&_span]:text-lg;
+		@apply py-1 px-5 bg-blue-50 text-sm sm:text-base [&_span]:text-lg sm:[&_span]:text-lg md:[&_span]:text-lg lg:[&_span]:text-lg;
 	}
 
 	/* HTML: <div class="loader"></div> */
@@ -119,7 +109,7 @@ body {
 		font-size: 30px;
 		background: radial-gradient(circle closest-side, #000 94%, #0000)
 			right/calc(200% - 1.5em) 100%;
-		animation: l24 1.3s infinite alternate linear;
+		animation: main-loader 1.3s infinite alternate linear;
 	}
 	.loader::before {
 		content: "Loading...";
@@ -131,7 +121,7 @@ body {
 		-webkit-background-clip: text;
 		background-clip: text;
 	}
-	@keyframes l24 {
+	@keyframes main-loader {
 		100% {
 			background-position: left;
 		}
@@ -144,6 +134,7 @@ body {
 		--animation-order: 1;
 		animation: music-indicator-line 0.5s ease infinite;
 		animation-delay: calc(var(--animation-order) * 0.1s);
+		will-change: transform;
 	}
 	@keyframes music-indicator-line {
 		0% {
