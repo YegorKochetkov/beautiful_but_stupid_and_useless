@@ -1,5 +1,5 @@
 import React from "react";
-import clsx from "clsx";
+import { cn } from "../../lib/utils";
 
 export function AudioIndicator() {
 	const [isAudioPlaying, setIsAudioPlaying] = React.useState(false);
@@ -26,7 +26,9 @@ export function AudioIndicator() {
 		<button
 			type="button"
 			onClick={toggleAudioIndicator}
-			className="ml-10 flex items-center space-x-0.5"
+			className="flex space-x-0.5"
+			title="Toggle music"
+			aria-label="Toggle music"
 		>
 			<audio
 				ref={audioElementRef}
@@ -37,7 +39,7 @@ export function AudioIndicator() {
 			{[1, 2, 3, 4].map((bar) => (
 				<div
 					key={bar}
-					className={clsx("indicator-line", {
+					className={cn("music-indicator-line", {
 						active: isIndicatorActive,
 					})}
 					style={{ "--animation-order": bar } as React.CSSProperties}
