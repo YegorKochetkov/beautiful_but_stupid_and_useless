@@ -19,7 +19,8 @@ export function Navbar({ children }: { children: React.ReactNode }) {
 				"fixed inset-x-2 sm:inset-x-6 top-4 z-[100] h-16 border-none transition-all duration-700 rounded-lg",
 				{
 					"navbar-background": scrolledFromTop,
-					"opacity-0": scrolledFromTop && scrollStopped && !isNavbarHovered,
+					"opacity-0 -translate-y-full":
+						scrolledFromTop && scrollStopped && !isNavbarHovered,
 				}
 			)}
 			onMouseEnter={() => setIsNavbarHovered(true)}

@@ -2,7 +2,8 @@ import React from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import clsx from "clsx";
+
+import { cn } from "../../lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -44,9 +45,9 @@ export const AnimatedText = ({
 	}, []);
 
 	return (
-		<p ref={wrapperRef} className={clsx("flex flex-col gap-1", containerClass)}>
+		<p ref={wrapperRef} className={cn("flex flex-col gap-1", containerClass)}>
 			{text.split("<br />").map((line, lineIndex) => (
-				<span key={lineIndex} className={clsx("flex flex-wrap gap-1", textClass)}>
+				<span key={lineIndex} className={cn("flex flex-wrap gap-1", textClass)}>
 					{line.split(" ").map((word, wordIndex) => (
 						<span
 							key={wordIndex}
