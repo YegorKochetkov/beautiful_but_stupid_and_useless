@@ -8,6 +8,33 @@ import { MenuItems } from "./MenuItems";
 export function MobileMenu() {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
+	React.useEffect(() => {
+		const handleEscapeKey = (event: KeyboardEvent) => {
+			if (event.key === "Escape") {
+				setIsMobileMenuOpen(false);
+			}
+		};
+
+		const handleClickOutside = (event: MouseEvent) => {
+			if (!(event.target as HTMLElement).closest("#navbar")) {
+				setIsMobileMenuOpen(false);
+			}
+		};
+
+		const mobileMenuController = new AbortController();
+
+		window.addEventListener("keydown", handleEscapeKey, {
+			signal: mobileMenuController.signal,
+		});
+		window.addEventListener("click", handleClickOutside, {
+			signal: mobileMenuController.signal,
+		});
+
+		return () => {
+			mobileMenuController.abort();
+		};
+	}, []);
+
 	return (
 		<div className="relative md:hidden">
 			<button

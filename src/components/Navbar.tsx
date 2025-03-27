@@ -7,13 +7,14 @@ import { cn } from "../lib/utils";
 export function Navbar({ children }: { children: React.ReactNode }) {
 	const [isNavbarHovered, setIsNavbarHovered] = React.useState(false);
 
-	const { scrollStopped } = useDelayedWindowScrollTrigger(40, 2000);
+	const { scrollStopped } = useDelayedWindowScrollTrigger(40, 4000);
 	const { scrolledFromTop } = useWindowScrollTop(40);
 
 	const navContainerRef = React.useRef<HTMLDivElement>(null);
 
 	return (
 		<div
+			id="navbar"
 			ref={navContainerRef}
 			className={cn(
 				"fixed inset-x-2 sm:inset-x-6 top-4 z-[100] h-16 border-none transition-all duration-700 rounded-lg",

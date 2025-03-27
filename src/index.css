@@ -91,7 +91,6 @@ body {
 		background: rgba(0, 0, 0, 0.7);
 		-webkit-backdrop-filter: blur(10px);
 		backdrop-filter: blur(10px);
-		transition: background 0.3s ease;
 	}
 
 	.button {
