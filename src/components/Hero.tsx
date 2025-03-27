@@ -64,10 +64,7 @@ type HeroContentProps = React.HTMLAttributes<HTMLDivElement> & {
 function HeroContent({ children, ...props }: HeroContentProps) {
 	return (
 		<div {...props}>
-			<div
-				id="video-frame"
-				className="relative bg-bbsu-blue-75 w-screen h-dvh overflow-hidden"
-			>
+			<div id="video-frame" className="relative w-screen h-dvh overflow-hidden">
 				{children}
 			</div>
 		</div>

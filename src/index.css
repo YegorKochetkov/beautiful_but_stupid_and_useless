@@ -60,13 +60,11 @@ body {
 	}
 
 	.hover-3d-effect {
+		--glare-opacity: 0.3;
 		@apply [transform:rotateX(var(--x-rotation))_rotateY(var(--y-rotation))]
 			after:content-[""] after:absolute
 			after:inset-0 after:pointer-events-none
-			after:bg-[radial-gradient(at_var(--x)_var(--y),rgba(255,255,255,0.2)_10%,transparent_70%)];
-	}
-	.remove-hover-3d-effect {
-		@apply [transform:rotateX(0)_rotateY(0)] transition-transform duration-300;
+			after:bg-[radial-gradient(at_var(--x)_var(--y),rgba(255,255,255)_10%,transparent_70%)] after:opacity-[var(--glare-opacity)];
 	}
 }
 

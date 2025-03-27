@@ -101,6 +101,10 @@ export const VideoBackground = ({
 					nextVideoButton,
 					{
 						onstart: () => {
+							if (nextVideoButton) {
+								nextVideoButton.style.setProperty("--glare-opacity", "0");
+							}
+
 							// Play expanding video from the beginning
 							if (videoElementInNextVideoButton) {
 								videoElementInNextVideoButton.currentTime = 0;
@@ -124,6 +128,7 @@ export const VideoBackground = ({
 						onComplete: () => {
 							if (nextVideoButton) {
 								nextVideoButton.disabled = false;
+								nextVideoButton.style.setProperty("--glare-opacity", "0.3");
 							}
 							// Pause previously expanded video after next video is expanded
 							if (videoElementInExpandedVideo) {
@@ -160,7 +165,7 @@ export const VideoBackground = ({
 	);
 
 	const videoButtonStyle =
-		"size-44 z-50 rounded-xl border-2 border-bbsu-black-700 opacity-70 hover:opacity-100 transition-opacity duration-300 ease-in-out button-with-video-appearance";
+		"hover-3d-effect size-44 z-50 rounded-xl border-2 border-bbsu-black-700 opacity-70 hover:opacity-100 transition-opacity duration-300 ease-in-out button-with-video-appearance";
 	const expandedVideoStyle =
 		"size-full z-10 border-0 [transform:rotateX(0deg)_rotateY(0deg)] cursor-default";
 	const hiddenVideoStyle = `${videoButtonStyle} z-0 hidden`;
@@ -189,7 +194,7 @@ export const VideoBackground = ({
 						data-is-expanded={isExpanded}
 						type="button"
 						aria-label="change background video"
-						className={`hover-3d-effect absolute overflow-hidden ${styles}`}
+						className={`absolute overflow-hidden ${styles}`}
 					>
 						<video
 							muted
