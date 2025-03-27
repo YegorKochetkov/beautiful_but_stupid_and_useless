@@ -1,4 +1,5 @@
 import { About } from "./components/About";
+import { Features } from "./components/Features";
 import { Hero } from "./components/Hero";
 import { Navbar } from "./components/Navbar";
 import { AudioIndicator } from "./components/ui/AudioIndicator";
@@ -20,6 +21,7 @@ const App = () => {
 			<main>
 				<Hero />
 				<About />
+				<Features />
 			</main>
 		</div>
 	);

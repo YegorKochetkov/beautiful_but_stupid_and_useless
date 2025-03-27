@@ -36,7 +36,7 @@ export function Hero() {
 	}, []);
 
 	return (
-		<div
+		<section
 			ref={heroComponent}
 			className="relative w-screen h-dvh overflow-x-hidden"
 		>
@@ -53,7 +53,7 @@ export function Hero() {
 			</HeroContent>
 
 			<DecorativeElement />
-		</div>
+		</section>
 	);
 }
 

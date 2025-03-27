@@ -20,8 +20,8 @@ export function About() {
 		});
 
 		tl.to(".mask-clip-path", {
-			width: "100vw",
-			height: "100vh",
+			width: "100%",
+			height: "100%",
 			borderRadius: 0,
 		});
 
@@ -39,7 +39,7 @@ export function About() {
 
 	function AboutContent() {
 		return (
-			<div className="relative mb-8 mt-36 flex flex-col items-center gap-5">
+			<section className="relative mb-8 mt-36 flex flex-col items-center gap-5">
 				<h2 className="text-xl md:text-3xl xl:text-4xl px-4 mb-5 uppercase text-center">
 					Why don&apos;t &rdquo;pretty&ldquo; websites actually sell?
 				</h2>
@@ -56,12 +56,7 @@ export function About() {
 						more sales than just convenient, fast and functional.
 					</p>
 
-					{/* <p className="text-gray-500">
-            Дорогие сайты кучей эффектов и анимаций могут быть неэффективными
-            из-за долгой загрузки и низкой конверсии. Идеальный путь клиента: пять
-            секунд на сайте и целевое действие. Реальный путь клиента более
-            длинный, c несколькими уровнями прогрева.
-        </p>
+					{/* 
         <p>
             Цель сайта - донести информацию o продукте и получить деньги клиента.
             Пользователь должен понимать, куда он попал, за три-пять секунд. Текст
@@ -77,7 +72,7 @@ export function About() {
             улучшает конверсию.
         </p> */}
 				</div>
-			</div>
+			</section>
 		);
 	}
 

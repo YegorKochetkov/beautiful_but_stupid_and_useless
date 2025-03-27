@@ -30,7 +30,7 @@ export const VideoBackground = ({
 	const [currentVideoIndex, setCurrentVideoIndex] = React.useState(0);
 	const nextVideoIndex = (currentVideoIndex + 1) % totalHeroVideos;
 
-	// 3-d tilt effect for the video button
+	// 3-d tilt effect for the video button.
 	const handleMouseMove = (ev: MouseEvent) => {
 		const videoButton = document.querySelector<HTMLButtonElement>(
 			'button[data-is-button="true"]'
@@ -48,6 +48,7 @@ export const VideoBackground = ({
 
 		let xRotation = (xPercentage - 0.5) * 10;
 		let yRotation = (0.5 - yPercentage) * 10;
+
 		// Maximum rotation is 25 degrees
 		xRotation = Math.abs(xRotation) > 25 ? 25 * Math.sign(xRotation) : xRotation;
 		yRotation = Math.abs(yRotation) > 25 ? 25 * Math.sign(yRotation) : yRotation;
@@ -67,7 +68,7 @@ export const VideoBackground = ({
 		});
 
 		return () => mouseMoveController.abort();
-	});
+	}, []);
 
 	useGSAP(
 		(_context, contextSafe) => {
