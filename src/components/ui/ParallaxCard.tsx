@@ -153,6 +153,18 @@ export const ParallaxCard = ({
 		const rotationXFactor = width < 700 ? 2 : 1;
 		const rotationYFactor = height < 600 ? 4 : 2;
 
+		// 		The subtraction of 0.5 is crucial for creating a centered rotation effect. Here's why:
+
+		// xPercentage and yPercentage represent the mouse position relative to the card, normalized between 0 and 1:
+		// 0 is the left/top edge of the card
+		// 1 is the right/bottom edge of the card
+		// By subtracting 0.5, you shift the rotation point to the center of the card:
+		// Without -0.5, rotation would be from 0 to 1
+		// With -0.5, rotation is now from -0.5 to 0.5, centered around 0
+		// This means:
+		// When the mouse is at the left/top edge, you get a negative rotation
+		// When the mouse is at the right/bottom edge, you get a positive rotation
+		// When the mouse is in the center, the rotation is 0
 		const xRotation = (xPercentage - 0.5) * (Math.PI * rotationXFactor);
 		const yRotation = -(yPercentage - 0.5) * (Math.PI * rotationYFactor);
 
