@@ -21,7 +21,7 @@ export function Hero() {
 		tl.from("#video-frame", {
 			clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
 		}).to("#video-frame", {
-			clipPath: "polygon(0% 0%, 50% 0%, 100% 70%, 70% 100%, 0% 50%)",
+			clipPath: "polygon(0% 0%, 50% 0%, 100% 70%, 100% 100%, 0% 100%)",
 			ease: "power1.inOut",
 			scrollTrigger: {
 				trigger: "#video-frame",
