@@ -177,7 +177,6 @@ body {
 	.parallax-card {
 		--slide-width: 100%;
 		--slide-height: 100%;
-		--slide-aspect: 1 / 1;
 
 		--slide-transition-duration: 800ms;
 		--slide-transition-easing: ease;
@@ -211,7 +210,6 @@ body {
 			pointer-events: auto;
 			width: var(--slide-width);
 			height: var(--slide-height);
-			aspect-ratio: var(--slide-aspect);
 			-webkit-user-select: none;
 			user-select: none;
 			perspective: 800px;
@@ -259,7 +257,6 @@ body {
 
 			width: var(--slide-width);
 			height: 100%;
-			aspect-ratio: var(--slide-aspect);
 			perspective: 800px;
 			z-index: 100;
 		}

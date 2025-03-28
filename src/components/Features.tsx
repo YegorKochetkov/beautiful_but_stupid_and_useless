@@ -4,7 +4,7 @@ import { ParallaxCard } from "./ui/ParallaxCard";
 
 export function Features() {
 	return (
-		<section className="bg-black pb-7">
+		<section className="bg-black pb-7 min-w-[360px]">
 			<div className="container flex flex-col gap-7 mx-auto px-5 py-32 md:px-10">
 				<p className="text-bbsu-blue-50 text-xl md:text-2xl font-circular-web">
 					Expensive websites with a lot of effects and animations can be
@@ -18,7 +18,7 @@ export function Features() {
 				</p>
 			</div>
 
-			<div className="mb-7 h-96 md:h-[65vh] w-11/12 mx-auto">
+			<div className="mb-7 h-96 w-11/12 mx-auto">
 				<ParallaxCard
 					src="videos/feature-1.mp4"
 					title="VideoCard"
@@ -27,8 +27,8 @@ export function Features() {
 				/>
 			</div>
 
-			<div className="grid grid-cols-2 grid-rows-4 gap-7 h-[130vh] w-11/12 mx-auto">
-				<div className="col-span-2 row-span-1 md:row-span-2 md:col-span-1">
+			<div className="grid grid-cols-2 grid-rows-[repeat(4,auto)] gap-7 w-11/12 mx-auto">
+				<div className="col-span-2 row-span-1 md:row-span-2 md:col-span-1 h-96">
 					<ParallaxCard
 						src="videos/feature-2.mp4"
 						title="VideoCard 2"
@@ -36,7 +36,7 @@ export function Features() {
 					/>
 				</div>
 
-				<div className="col-span-2 row-span-1 md:row-span-2 md:col-span-1 ms-32 md:ms-0">
+				<div className="col-span-2 row-span-1 md:row-span-2 md:col-span-1 sm:ms-20 md:ms-0 h-96 md:h-auto">
 					<ParallaxCard
 						src="videos/feature-3.mp4"
 						title="VideoCard 3"
@@ -44,7 +44,7 @@ export function Features() {
 					/>
 				</div>
 
-				<div className="col-span-2 row-span-1 md:row-span-2 md:col-span-1 me-14 md:me-0">
+				<div className="col-span-2 row-span-1 md:row-span-2 md:col-span-1 sm:me-14 md:me-0 h-96">
 					<ParallaxCard
 						src="videos/feature-4.mp4"
 						title="VideoCard 4"
@@ -56,7 +56,7 @@ export function Features() {
 					<ParallaxCard
 						title="More coming soon!"
 						decorativeElement={
-							<TiLocationArrow className="absolute -right-7 -bottom-7 md:text-9xl text-7xl text-bbsu-blue-50 svg-shadow rotate-12" />
+							<TiLocationArrow className="absolute -right-7 -bottom-7 text-7xl text-bbsu-blue-50 svg-shadow rotate-12" />
 						}
 					/>
 				</div>

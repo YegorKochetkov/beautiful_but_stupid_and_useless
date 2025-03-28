@@ -168,8 +168,13 @@ export const ParallaxCard = ({
 		const xRotation = (xPercentage - 0.5) * (Math.PI * rotationXFactor);
 		const yRotation = -(yPercentage - 0.5) * (Math.PI * rotationYFactor);
 
+		const positionDecreaseFactor = 0.6;
+
 		rotation.target.set(xRotation, yRotation);
-		position.target.set(-xRotation * 0.6, yRotation * 0.6);
+		position.target.set(
+			-xRotation * positionDecreaseFactor,
+			yRotation * positionDecreaseFactor
+		);
 
 		rotation.current.interpolate(rotation.target, lerpFactor);
 		position.current.interpolate(position.target, lerpFactor);
