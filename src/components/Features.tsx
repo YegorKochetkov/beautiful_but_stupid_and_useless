@@ -56,7 +56,7 @@ export function Features() {
 					<ParallaxCard
 						title="More coming soon!"
 						decorativeElement={
-							<TiLocationArrow className="absolute -right-7 -bottom-7 text-7xl text-bbsu-blue-50 svg-shadow rotate-12" />
+							<TiLocationArrow className="absolute -right-7 -bottom-7 text-5xl sm:text-6xl md:text-7xl text-bbsu-blue-50 svg-shadow rotate-12" />
 						}
 					/>
 				</div>
