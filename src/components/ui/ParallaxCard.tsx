@@ -196,7 +196,7 @@ export const ParallaxCard = ({
 		rotation.current.interpolate(rotation.target, lerpFactor);
 		position.current.interpolate(position.target, lerpFactor);
 	};
-	// test
+
 	React.useEffect(() => {
 		if (!cardRef.current) return;
 
@@ -204,10 +204,10 @@ export const ParallaxCard = ({
 		cardRef.current.style.setProperty("--slide-transition-duration", "0ms");
 
 		const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
-			if (event.beta !== null && event.alpha !== null) {
+			if (event.beta !== null && event.gamma !== null) {
 				// Normalize and limit the tilt angles
 				const xRotation = Math.max(Math.min(event.beta, 21), -21);
-				const yRotation = Math.max(Math.min(event.alpha, 16), -16);
+				const yRotation = Math.max(Math.min(event.gamma, 16), -16);
 
 				rotation.target.set(-xRotation, yRotation);
 				rotation.current.interpolate(rotation.target, lerpFactor);
@@ -227,14 +227,18 @@ export const ParallaxCard = ({
 
 		// Check if device orientation events are supported
 		if (window.DeviceOrientationEvent) {
-			window.addEventListener("deviceorientation", handleDeviceOrientation);
+			const deviceOrientationController = new AbortController();
+
+			window.addEventListener("deviceorientation", handleDeviceOrientation, {
+				signal: deviceOrientationController.signal,
+			});
 
 			return () => {
-				window.removeEventListener("deviceorientation", handleDeviceOrientation);
+				deviceOrientationController.abort();
 			};
 		}
 	}, []);
-	// end test
+
 	return (
 		<article
 			className="parallax-card size-full hover:scale-[98%] hover:md:scale-[99%]"
