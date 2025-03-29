@@ -209,7 +209,7 @@ export const ParallaxCard = ({
 				const xRotation = Math.max(Math.min(event.beta, 8), -8);
 				const yRotation = Math.max(Math.min(event.gamma, 16), -16);
 
-				rotation.target.set(xRotation, yRotation);
+				rotation.target.set(-xRotation, yRotation);
 				rotation.current.interpolate(rotation.target, lerpFactor);
 
 				cardRef.current?.style.setProperty(
