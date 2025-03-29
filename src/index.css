@@ -182,6 +182,9 @@ body {
 		--slide-transition-easing: ease;
 
 		position: relative;
+		/* test */
+		perspective: 800px;
+		/* end test */
 		transition: transform var(--slide-transition-duration)
 			var(--slide-transition-easing);
 

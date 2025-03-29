@@ -196,7 +196,40 @@ export const ParallaxCard = ({
 		rotation.current.interpolate(rotation.target, lerpFactor);
 		position.current.interpolate(position.target, lerpFactor);
 	};
+	// test
+	React.useEffect(() => {
+		if (!cardRef.current) return;
 
+		cardRef.current.style.setProperty(
+			"transform",
+			"rotateX(0deg) rotateY(0deg) perspective(800px)"
+		);
+
+		const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
+			if (event.beta !== null && event.gamma !== null) {
+				// Normalize and limit the tilt angles
+				const xRotation = Math.max(Math.min(event.beta / 2, 10), -10);
+				const yRotation = Math.max(Math.min(event.gamma / 2, 10), -10) * 2;
+
+				cardRef.current?.style.setProperty(
+					"transform",
+					`rotateX(${yRotation.toFixed(2)}deg) rotateY(${xRotation.toFixed(
+						2
+					)}deg)`
+				);
+			}
+		};
+
+		// Check if device orientation events are supported
+		if (window.DeviceOrientationEvent) {
+			window.addEventListener("deviceorientation", handleDeviceOrientation);
+
+			return () => {
+				window.removeEventListener("deviceorientation", handleDeviceOrientation);
+			};
+		}
+	}, []);
+	// end test
 	return (
 		<article
 			className="parallax-card size-full hover:scale-[98%] hover:md:scale-[99%]"
