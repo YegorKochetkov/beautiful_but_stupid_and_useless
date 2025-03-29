@@ -25,7 +25,7 @@ export function Hero() {
 			ease: "power1.inOut",
 			scrollTrigger: {
 				trigger: "#video-frame",
-				start: "center center",
+				start: "center center-=100px",
 				scrub: true,
 			},
 		});
