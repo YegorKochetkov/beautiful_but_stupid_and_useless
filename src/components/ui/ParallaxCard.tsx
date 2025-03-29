@@ -204,10 +204,10 @@ export const ParallaxCard = ({
 		cardRef.current.style.setProperty("--slide-transition-duration", "0ms");
 
 		const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
-			if (event.beta !== null && event.gamma !== null) {
+			if (event.beta !== null && event.alpha !== null) {
 				// Normalize and limit the tilt angles
-				const xRotation = Math.max(Math.min(event.beta, 8), -8);
-				const yRotation = Math.max(Math.min(event.gamma, 16), -16);
+				const xRotation = Math.max(Math.min(event.beta, 21), -21);
+				const yRotation = Math.max(Math.min(event.alpha, 16), -16);
 
 				rotation.target.set(-xRotation, yRotation);
 				rotation.current.interpolate(rotation.target, lerpFactor);
