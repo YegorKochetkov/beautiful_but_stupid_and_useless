@@ -202,20 +202,21 @@ export const ParallaxCard = ({
 
 		cardRef.current.style.setProperty(
 			"transform",
-			"rotateX(0deg) rotateY(0deg) perspective(800px)"
+			"rotateX(0deg) rotateY(0deg) rotateZ(0deg) perspective(800px)"
 		);
 
 		const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
-			if (event.beta !== null && event.gamma !== null) {
+			if (event.beta !== null && event.gamma !== null && event.alpha !== null) {
 				// Normalize and limit the tilt angles
-				const xRotation = Math.max(Math.min(event.beta / 2, 10), -10);
-				const yRotation = Math.max(Math.min(event.gamma / 2, 10), -10) * 2;
+				const xRotation = Math.max(Math.min(event.beta / 2, 23), -23);
+				const yRotation = Math.max(Math.min(event.gamma / 2, 23), -23);
+				const zRotation = Math.max(Math.min(event.alpha / 2, 23), -23);
 
 				cardRef.current?.style.setProperty(
 					"transform",
 					`rotateX(${yRotation.toFixed(2)}deg) rotateY(${xRotation.toFixed(
 						2
-					)}deg)`
+					)}deg) rotateZ(${zRotation.toFixed(2)}deg) perspective(800px)`
 				);
 			}
 		};
