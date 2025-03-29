@@ -206,8 +206,8 @@ export const ParallaxCard = ({
 		const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
 			if (event.beta !== null && event.gamma !== null) {
 				// Normalize and limit the tilt angles
-				const xRotation = Math.max(Math.min(event.beta, 7), -7);
-				const yRotation = Math.max(Math.min(event.gamma, 14), -14);
+				const xRotation = Math.max(Math.min(event.beta, 14), -14);
+				const yRotation = Math.max(Math.min(event.gamma, 28), -28);
 
 				rotation.target.set(xRotation, yRotation);
 				rotation.current.interpolate(rotation.target, lerpFactor);
