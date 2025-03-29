@@ -214,9 +214,9 @@ export const ParallaxCard = ({
 
 				cardRef.current?.style.setProperty(
 					"transform",
-					`rotateX(${rotation.current.y.toFixed(
+					`rotateX(${rotation.current.x.toFixed(
 						2
-					)}deg) rotateY(${rotation.current.x.toFixed(2)}deg) perspective(800px)`
+					)}deg) rotateY(${rotation.current.y.toFixed(2)}deg) perspective(800px)`
 				);
 				cardRef.current?.style.setProperty(
 					"--slide-transition-duration",
