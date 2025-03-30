@@ -1,87 +1,13 @@
 // Cut from slider https://codepen.io/dev_loop/pen/MWKbJmO
+
 import React, { useRef } from "react";
 import { TiLocationArrow } from "react-icons/ti";
 
 import { Button } from "./Button";
 import { cn } from "../../lib/utils";
 
-/**
- * Linear interpolation between two values:
- * Linear interpolation (lerp) is a mathematical technique
- * used to smoothly transition or blend between two values.
- *
- * Here's a detailed explanation:
- *
- * In the context of the lerp function (a, b, t) => a + (b - a) * t:
- *
- * a is the starting value
- * b is the ending value
- * t is the interpolation factor (typically between 0 and 1)
- *
- * Examples to illustrate:
- *
- * lerp(0, 100, 0.5) → 50 (exactly halfway between 0 and 100)
- * lerp(0, 100, 0.25) → 25 (25% of the way from 0 to 100)
- * lerp(0, 100, 0.75) → 75 (75% of the way from 0 to 100)
- *
- * In this project, lerp is used for smooth animations:
- *
- * Creating gradual transitions in tilt and background position
- * Providing a more natural, fluid motion instead of abrupt changes
- * Allowing fine-grained control over animation progression
- *
- * This creates a soft, eased movement that makes the tilt effect feel more organic
- * and visually appealing.
- */
-const lerp = (a: number, b: number, t: number): number => a + (b - a) * t;
-const lerpFactor = 0.06;
-
-interface Vec2 {
-	x: number;
-	y: number;
-}
-/**
- * Creates a 2D Vector
- */
-const createVec2 = (x = 0, y = 0) => {
-	const state = { x, y };
-
-	/**
-	 * Sets vector coordinates
-	 */
-	const set = (newX: number, newY: number) => {
-		state.x = newX;
-		state.y = newY;
-	};
-
-	/**
-	 * Linear interpolation between current and target vector
-	 */
-	const interpolateVec = (v: Vec2, t: number) => {
-		state.x = lerp(state.x, v.x, t);
-		state.y = lerp(state.y, v.y, t);
-	};
-
-	return {
-		get x() {
-			return state.x;
-		},
-		get y() {
-			return state.y;
-		},
-		set,
-		interpolate: interpolateVec,
-	};
-};
-
-const rotation = {
-	current: createVec2(),
-	target: createVec2(),
-};
-const position = {
-	current: createVec2(),
-	target: createVec2(),
-};
+import { rotation, position, Vec2, lerpFactor } from "../../lib/parallax";
+import { useGyroscopeTilt } from "../../hooks/useGyroscopeTilt";
 
 export const ParallaxCard = ({
 	src,
@@ -136,7 +62,9 @@ export const ParallaxCard = ({
 		);
 	};
 
-	const onMouseMove = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+	const handleMouseMove = (
+		event: React.MouseEvent<HTMLDivElement, MouseEvent>
+	) => {
 		if (!cardRef.current) return;
 
 		cardRef.current?.classList.remove("reset-position");
@@ -153,8 +81,7 @@ export const ParallaxCard = ({
 		const rotationXFactor = width < 700 ? 2 : 1;
 		const rotationYFactor = height < 600 ? 4 : 2;
 
-		// 		The subtraction of 0.5 is crucial for creating a centered rotation effect. Here's why:
-
+		// The subtraction of 0.5 is crucial for creating a centered rotation effect. Here's why:
 		// xPercentage and yPercentage represent the mouse position relative to the card, normalized between 0 and 1:
 		// 0 is the left/top edge of the card
 		// 1 is the right/bottom edge of the card
@@ -182,7 +109,7 @@ export const ParallaxCard = ({
 		setStyle(rotation.current, position.current);
 	};
 
-	const onMouseLeave = () => {
+	const handleMouseLeave = () => {
 		cardRef.current?.classList.add("reset-position");
 
 		rotation.current.set(0, 0);
@@ -197,53 +124,13 @@ export const ParallaxCard = ({
 		position.current.interpolate(position.target, lerpFactor);
 	};
 
-	React.useEffect(() => {
-		if (!cardRef.current) return;
-
-		cardRef.current.style.setProperty("transform", "rotateX(0deg) rotateY(0deg)");
-		cardRef.current.style.setProperty("--slide-transition-duration", "0ms");
-
-		const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
-			if (event.beta !== null && event.gamma !== null) {
-				// Normalize and limit the tilt angles
-				const xRotation = Math.max(Math.min(event.beta, 21), -21);
-				const yRotation = Math.max(Math.min(event.gamma, 16), -16);
-
-				rotation.target.set(-xRotation, yRotation);
-				rotation.current.interpolate(rotation.target, lerpFactor);
-
-				cardRef.current?.style.setProperty(
-					"transform",
-					`rotateX(${rotation.current.x.toFixed(
-						2
-					)}deg) rotateY(${rotation.current.y.toFixed(2)}deg) perspective(800px)`
-				);
-				cardRef.current?.style.setProperty(
-					"--slide-transition-duration",
-					"300ms"
-				);
-			}
-		};
-
-		// Check if device orientation events are supported
-		if (window.DeviceOrientationEvent) {
-			const deviceOrientationController = new AbortController();
-
-			window.addEventListener("deviceorientation", handleDeviceOrientation, {
-				signal: deviceOrientationController.signal,
-			});
-
-			return () => {
-				deviceOrientationController.abort();
-			};
-		}
-	}, []);
+	useGyroscopeTilt(cardRef);
 
 	return (
 		<article
 			className="parallax-card size-full hover:scale-[98%] hover:md:scale-[99%]"
-			onMouseLeave={onMouseLeave}
-			onMouseMove={onMouseMove}
+			onMouseLeave={handleMouseLeave}
+			onMouseMove={handleMouseMove}
 			ref={cardRef}
 		>
 			{/* Card background */}
