@@ -54,7 +54,8 @@ body {
 			0 0 0.15em #000;
 	}
 	.svg-shadow {
-		/* -webkit-filter: drop-shadow(4px 3px 2px #000); */
+		-webkit-filter: drop-shadow(1px 1px 3px #000) drop-shadow(-1px -1px 3px #000)
+			drop-shadow(1px -1px 3px #000);
 		filter: drop-shadow(1px 1px 3px #000) drop-shadow(-1px -1px 3px #000)
 			drop-shadow(1px -1px 3px #000);
 	}
@@ -182,9 +183,6 @@ body {
 		--slide-transition-easing: ease;
 
 		position: relative;
-		/* test */
-		perspective: 800px;
-		/* end test */
 		transition: transform var(--slide-transition-duration)
 			var(--slide-transition-easing);
 
