@@ -12,12 +12,11 @@ export const useDelayedWindowScrollTrigger = (
 	React.useEffect(() => {
 		const handleScroll = () => {
 			const currentScrollY = window.scrollY;
+			const isScrollTriggered =
+				currentScrollY >= prevScrollY.current + triggerShift ||
+				currentScrollY < prevScrollY.current - triggerShift;
 
-			if (currentScrollY >= prevScrollY.current + triggerShift) {
-				setScrollStopped(false);
-			}
-
-			if (currentScrollY < prevScrollY.current - triggerShift) {
+			if (isScrollTriggered) {
 				setScrollStopped(false);
 			}
 
