@@ -45,7 +45,7 @@ body {
 	}
 
 	.special-font span {
-		font-family: "Zentry-regular";
+		font-family: "Zentry-regular", system-ui, sans-serif;
 		font-feature-settings: "ss01" on;
 	}
 

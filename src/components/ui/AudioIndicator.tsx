@@ -35,7 +35,9 @@ export function AudioIndicator() {
 				className="hidden"
 				src="/audio/loop.mp3"
 				loop
-			/>
+			>
+				<track kind="captions" src="/audio/loop.vtt" srcLang="en" />
+			</audio>
 			{[1, 2, 3, 4].map((bar) => (
 				<div
 					key={bar}
