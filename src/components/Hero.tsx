@@ -1,7 +1,7 @@
-import React from "react";
-import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import React from "react";
 import { TiLocationArrow } from "react-icons/ti";
 
 import { Button } from "./ui/Button";
@@ -38,7 +38,7 @@ export function Hero() {
 	return (
 		<section
 			ref={heroComponent}
-			className="relative w-screen h-dvh overflow-x-hidden"
+			className="relative h-dvh w-screen overflow-x-hidden"
 		>
 			<Loader hide={allVideosLoaded} />
 
@@ -64,7 +64,7 @@ type HeroContentProps = React.HTMLAttributes<HTMLDivElement> & {
 function HeroContent({ children, ...props }: HeroContentProps) {
 	return (
 		<div {...props}>
-			<div id="video-frame" className="relative w-screen h-dvh overflow-hidden">
+			<div id="video-frame" className="relative h-dvh w-screen overflow-hidden">
 				{children}
 			</div>
 		</div>
@@ -74,16 +74,16 @@ function HeroContent({ children, ...props }: HeroContentProps) {
 function HeroHeader() {
 	return (
 		<div className="mt-24 px-5 sm:px-10">
-			<h1 className="sm:right-10 font-black font-zentry-regular text-5xl text-bbsu-blue-100 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase">
+			<h1 className="font-black font-zentry-regular text-5xl text-bbsu-blue-100 uppercase sm:right-10 sm:text-7xl md:text-9xl lg:text-[12rem]">
 				<span className="relative">
 					<span className="special-font">
 						Be<span>au</span>tif<span>u</span>l
 					</span>
-					<span className="-bottom-5 sm:-bottom-6 md:-bottom-7 lg:-bottom-9 left-0 absolute font-robert-regular text-bbsu-blue-100 text-lg sm:text-2xl md:text-4xl lg:text-5xl">
+					<span className="-bottom-5 sm:-bottom-6 md:-bottom-7 lg:-bottom-9 absolute left-0 font-robert-regular text-bbsu-blue-100 text-lg sm:text-2xl md:text-4xl lg:text-5xl">
 						but stupid and
 					</span>
 				</span>
-				<span className="right-10 sm:right-14 bottom-5 z-40 absolute font-black font-zentry-regular text-5xl text-bbsu-blue-75 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase special-font">
+				<span className="special-font absolute right-10 bottom-5 z-40 font-black font-zentry-regular text-5xl text-bbsu-blue-75 uppercase sm:right-14 sm:text-7xl md:text-9xl lg:text-[12rem]">
 					<span>u</span>seless
 				</span>
 			</h1>
@@ -93,7 +93,7 @@ function HeroHeader() {
 
 function WatchTrailerButton() {
 	return (
-		<div className="top-48 sm:top-56 md:top-72 lg:top-[24rem] left-5 sm:left-10 absolute">
+		<div className="absolute top-48 left-5 sm:top-56 sm:left-10 md:top-72 lg:top-[24rem]">
 			<Button
 				id="watch-trailer"
 				leftIcon={<TiLocationArrow />}
@@ -111,7 +111,7 @@ function Loader({ hide }: { hide: boolean }) {
 	return (
 		<div
 			id="loader"
-			className="flex flex-col items-center justify-center  absolute z-[100] bg-bbsu-blue-75 w-screen h-dvh overflow-hidden"
+			className="absolute z-[100] flex h-dvh w-screen flex-col items-center justify-center overflow-hidden bg-bbsu-blue-75"
 		>
 			<span className="loader" />
 		</div>
@@ -122,7 +122,7 @@ function DecorativeElement() {
 	return (
 		<span
 			aria-hidden
-			className="right-10 sm:right-14 bottom-5 -z-10 absolute font-black font-zentry-regular text-5xl text-bbsu-black-700 sm:text-7xl md:text-9xl lg:text-[12rem] uppercase special-font"
+			className="-z-10 special-font absolute right-10 bottom-5 font-black font-zentry-regular text-5xl text-bbsu-black-700 uppercase sm:right-14 sm:text-7xl md:text-9xl lg:text-[12rem]"
 		>
 			<span>u</span>seless
 		</span>

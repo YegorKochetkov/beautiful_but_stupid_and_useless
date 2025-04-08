@@ -173,7 +173,7 @@ export const VideoBackground = ({
 	const hiddenVideoStyle = `${videoButtonStyle} z-0 hidden`;
 
 	return (
-		<div className="video-elements-container place-items-center grid w-screen h-screen absolute [perspective:1000px]">
+		<div className="video-elements-container absolute grid h-screen w-screen place-items-center [perspective:1000px]">
 			{heroVideosNumber.map((videoNumber) => {
 				const isExpanded = videoNumber === heroVideosNumber[currentVideoIndex];
 				const isButton = videoNumber === heroVideosNumber[nextVideoIndex];
@@ -204,7 +204,7 @@ export const VideoBackground = ({
 							loop
 							onLoadedData={checkIsAllVideosLoaded}
 							src={`/videos/hero-${videoNumber}.mp4`}
-							className="object-center object-cover size-full"
+							className="size-full object-cover object-center"
 						/>
 					</button>
 				);

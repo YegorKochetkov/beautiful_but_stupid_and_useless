@@ -1,22 +1,22 @@
 import React from "react";
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-	children?: React.ReactNode;
-	leftIcon?: React.ReactNode;
-	rightIcon?: React.ReactNode;
+  children?: React.ReactNode;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
 };
 
 export const Button = ({
-	leftIcon,
-	children,
-	rightIcon,
-	...props
+  leftIcon,
+  children,
+  rightIcon,
+  ...props
 }: ButtonProps) => {
-	return (
-		<button {...props}>
-			{leftIcon && <span>{leftIcon}</span>}
-			{children}
-			{rightIcon && <span>{rightIcon}</span>}
-		</button>
-	);
+  return (
+    <button {...props}>
+      {leftIcon && <span>{leftIcon}</span>}
+      {children}
+      {rightIcon && <span>{rightIcon}</span>}
+    </button>
+  );
 };

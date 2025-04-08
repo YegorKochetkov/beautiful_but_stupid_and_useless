@@ -8,23 +8,23 @@ import { MobileMenu } from "./components/ui/MobileMenu";
 import { NavLogo } from "./components/ui/NavLogo";
 
 const App = () => {
-	return (
-		<div className="relative overflow-x-hidden">
-			<header>
-				<Navbar>
-					<NavLogo />
-					<Menu />
-					<MobileMenu />
-					<AudioIndicator />
-				</Navbar>
-			</header>
-			<main>
-				<Hero />
-				<About />
-				<Features />
-			</main>
-		</div>
-	);
+  return (
+    <div className="relative overflow-x-hidden">
+      <header>
+        <Navbar>
+          <NavLogo />
+          <Menu />
+          <MobileMenu />
+          <AudioIndicator />
+        </Navbar>
+      </header>
+      <main>
+        <Hero />
+        <About />
+        <Features />
+      </main>
+    </div>
+  );
 };
 
 export default App;

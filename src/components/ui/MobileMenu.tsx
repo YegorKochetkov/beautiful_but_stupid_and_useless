@@ -40,18 +40,18 @@ export function MobileMenu() {
 			<button
 				type="button"
 				onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-				className="font-general text-base uppercase text-blue-50"
+				className="font-general text-base text-blue-50 uppercase"
 			>
 				Menu
 			</button>
 
 			<div
 				className={cn(
-					"navbar-background absolute flex flex-col gap-9 p-9 top-12 right-0 w-max rounded-xl [&_ul]:flex-col [&_ul]:gap-9 transition-all duration-700",
+					"navbar-background absolute top-12 right-0 flex w-max flex-col gap-9 rounded-xl p-9 transition-all duration-700 [&_ul]:flex-col [&_ul]:gap-9",
 					{
-						"hidden": !isMobileMenuOpen,
+						hidden: !isMobileMenuOpen,
 						"animate-slide-left": isMobileMenuOpen,
-					}
+					},
 				)}
 			>
 				<ProductsNavButton />
