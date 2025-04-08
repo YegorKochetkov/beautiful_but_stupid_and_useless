@@ -15,8 +15,8 @@ export const useGyroscopeTilt = (targetRef: React.RefObject<HTMLDivElement>) => 
 		const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
 			if (event.alpha !== null && event.gamma !== null) {
 				// Normalize and limit the tilt angles
-				const xRotation = Math.max(Math.min(event.alpha, 8), 8);
-				const yRotation = Math.max(Math.min(event.gamma, 8), -8);
+				const xRotation = Math.max(Math.min(event.alpha, 10), 10);
+				const yRotation = Math.max(Math.min(event.gamma, 10), -10);
 				
 				rotation.target.set(xRotation, -yRotation);
 				rotation.current.interpolate(rotation.target, lerpFactor);
