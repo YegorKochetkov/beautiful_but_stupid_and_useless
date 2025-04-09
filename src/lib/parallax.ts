@@ -26,7 +26,7 @@
  * This creates a soft, eased movement that makes the tilt effect feel more organic
  * and visually appealing.
  */
-export const lerp = (a: number, b: number, t: number): number => a + (b - a) * t;
+export const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 export const lerpFactor = 0.06;
 
 export interface Vec2 {

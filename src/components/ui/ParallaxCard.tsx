@@ -7,7 +7,7 @@ import { Button } from "./Button";
 import { cn } from "../../lib/utils";
 
 import { rotation, position, Vec2, lerpFactor } from "../../lib/parallax";
-import { useGyroscopeTilt } from "../../hooks/useGyroscopeTilt";
+import { useBackgroundTiltByGyroscope } from "../../hooks/useBackgroundTiltByGyroscope";
 
 export const ParallaxCard = ({
 	src,
@@ -116,16 +116,13 @@ export const ParallaxCard = ({
 		rotation.current.set(0, 0);
 		position.current.set(0, 0);
 
-		setStyle(rotation.current, position.current);
-
-		rotation.target.set(0, 0);
-		position.target.set(0, 0);
-
 		rotation.current.interpolate(rotation.target, lerpFactor);
 		position.current.interpolate(position.target, lerpFactor);
+
+		setStyle(rotation.current, position.current);
 	};
 
-	useGyroscopeTilt(cardRef, setStyle);
+	useBackgroundTiltByGyroscope(setStyle);
 
 	return (
 		<article
