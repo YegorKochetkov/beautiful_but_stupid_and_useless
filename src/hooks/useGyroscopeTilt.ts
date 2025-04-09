@@ -1,8 +1,10 @@
 import React from "react";
-import { lerpFactor, rotation } from "../lib/parallax";
+import { lerpFactor, position, rotation, Vec2 } from "../lib/parallax";
 
 // Tilt effect by device orientation
-export const useGyroscopeTilt = (targetRef: React.RefObject<HTMLDivElement>) => {
+export const useGyroscopeTilt = (
+	targetRef: React.RefObject<HTMLDivElement>, 
+	 setStyle: (rotation: Vec2, position: Vec2) => void) => {
 	React.useEffect(() => {
 		if (!targetRef.current) return;
 
@@ -13,24 +15,32 @@ export const useGyroscopeTilt = (targetRef: React.RefObject<HTMLDivElement>) => 
 		targetRef.current.style.setProperty("--slide-transition-duration", "0ms");
 
 		const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
-			if (event.alpha !== null && event.gamma !== null) {
+			if (event.alpha !== null && event.beta !== null && event.gamma !== null) {
 				// Normalize and limit the tilt angles
-				const xRotation = Math.max(Math.min(event.alpha, 10), 10);
-				const yRotation = Math.max(Math.min(event.gamma, 10), -10);
-				
-				rotation.target.set(xRotation, -yRotation);
-				rotation.current.interpolate(rotation.target, lerpFactor);
+				const rotationFactor = Math.abs(event.gamma) > 10 ? 10 * Math.sign(event.gamma) : event.gamma;
 
-				targetRef.current?.style.setProperty(
-					"transform",
-					`rotateX(${rotation.current.x.toFixed(4)}deg) 
-					rotateY(${rotation.current.y.toFixed(4)}deg)
-					perspective(400px)`
+				let xRotation = rotationFactor;
+				const yRotation = rotationFactor;
+				
+				if (event.beta < 90) {
+					xRotation = -xRotation;
+				}
+				if (event.beta > 90) {
+					xRotation = 0 - xRotation;
+				}
+				
+				const positionDecreaseFactor = 0.6;
+				
+				rotation.target.set(xRotation, yRotation);
+				position.target.set(
+					xRotation * positionDecreaseFactor,
+					yRotation * positionDecreaseFactor,
 				);
-				targetRef.current?.style.setProperty(
-					"--slide-transition-duration",
-					"300ms"
-				);
+		
+				rotation.current.interpolate(rotation.target, lerpFactor);
+				position.current.interpolate(position.target, lerpFactor);
+		
+				setStyle(rotation.current, position.current);
 			}
 		};
 
@@ -46,5 +56,5 @@ export const useGyroscopeTilt = (targetRef: React.RefObject<HTMLDivElement>) => 
 				deviceOrientationController.abort();
 			};
 		}
-	}, [targetRef]);
+	}, [setStyle, targetRef]);
 };

@@ -125,7 +125,7 @@ export const ParallaxCard = ({
 		position.current.interpolate(position.target, lerpFactor);
 	};
 
-	useGyroscopeTilt(cardRef);
+	useGyroscopeTilt(cardRef, setStyle);
 
 	return (
 		<article
