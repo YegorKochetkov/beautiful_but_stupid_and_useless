@@ -6,7 +6,7 @@ import { TiLocationArrow } from "react-icons/ti";
 import { Button } from "./Button";
 import { cn } from "../../lib/utils";
 
-import { rotation, position, Vec2, lerpFactor } from "../../lib/parallax";
+import { rotation, position, type Vec2, lerpFactor } from "../../lib/parallax";
 import { useBackgroundTiltByGyroscope } from "../../hooks/useBackgroundTiltByGyroscope";
 
 export const ParallaxCard = ({
@@ -29,36 +29,36 @@ export const ParallaxCard = ({
 	const setStyle = (rotation: Vec2, position: Vec2) => {
 		backgroundWrapperRef.current?.style.setProperty(
 			"--rotX",
-			rotation.y.toFixed(2) + "deg",
+			`${rotation.y.toFixed(2)}deg`,
 		);
 		backgroundWrapperRef.current?.style.setProperty(
 			"--rotY",
-			rotation.x.toFixed(2) + "deg",
+			`${rotation.x.toFixed(2)}deg`,
 		);
 		backgroundWrapperRef.current?.style.setProperty(
 			"--bgPosX",
-			position.x.toFixed(2) + "%",
+			`${position.x.toFixed(2)}%`,
 		);
 		backgroundWrapperRef.current?.style.setProperty(
 			"--bgPosY",
-			position.y.toFixed(2) + "%",
+			`${position.y.toFixed(2)}%`,
 		);
 
 		textWrapperRef.current?.style.setProperty(
 			"--rotX",
-			rotation.y.toFixed(2) + "deg",
+			`${rotation.y.toFixed(2)}deg`,
 		);
 		textWrapperRef.current?.style.setProperty(
 			"--rotY",
-			rotation.x.toFixed(2) + "deg",
+			`${rotation.x.toFixed(2)}deg`,
 		);
 		textWrapperRef.current?.style.setProperty(
 			"--bgPosX",
-			position.x.toFixed(2) + "%",
+			`${position.x.toFixed(2)}%`,
 		);
 		textWrapperRef.current?.style.setProperty(
 			"--bgPosY",
-			position.y.toFixed(2) + "%",
+			`${position.y.toFixed(2)}%`,
 		);
 	};
 

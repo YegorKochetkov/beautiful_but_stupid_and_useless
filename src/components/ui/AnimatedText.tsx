@@ -47,13 +47,16 @@ export const AnimatedText = ({
 	return (
 		<p ref={wrapperRef} className={cn("flex flex-col gap-1", containerClass)}>
 			{text.split("<br />").map((line, lineIndex) => (
+				// biome-ignore lint/suspicious/noArrayIndexKey: we`re not going to change the order of the elements in any way
 				<span key={lineIndex} className={cn("flex flex-wrap gap-1", textClass)}>
 					{line.split(" ").map((word, wordIndex) => (
 						<span
+							// biome-ignore lint/suspicious/noArrayIndexKey: we`re not going to change the order of the elements in any way
 							key={wordIndex}
 							className="animated-word"
-							dangerouslySetInnerHTML={{ __html: word }}
-						/>
+						>
+							{word}
+						</span>
 					))}
 				</span>
 			))}

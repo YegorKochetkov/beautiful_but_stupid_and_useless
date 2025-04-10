@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
 
+// biome-ignore lint/style/noNonNullAssertion: we definitely have that element
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
 		<App />

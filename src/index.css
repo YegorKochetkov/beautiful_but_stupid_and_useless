@@ -214,6 +214,7 @@ body {
 			-webkit-user-select: none;
 			user-select: none;
 			perspective: 800px;
+
 			transform: perspective(800px);
 		}
 

@@ -2,7 +2,7 @@ import React from "react";
 
 export const useDelayedWindowScrollTrigger = (
 	triggerShift: number,
-	delay: number
+	delay: number,
 ) => {
 	const [scrollStopped, setScrollStopped] = React.useState<boolean>(true);
 

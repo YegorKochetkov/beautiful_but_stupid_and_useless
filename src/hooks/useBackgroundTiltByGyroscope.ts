@@ -1,5 +1,5 @@
 import React from "react";
-import { position, rotation, Vec2 } from "../lib/parallax";
+import { position, rotation, type Vec2 } from "../lib/parallax";
 
 // Tilt effect by device orientation
 export const useBackgroundTiltByGyroscope = (
