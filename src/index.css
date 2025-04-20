@@ -284,7 +284,7 @@ body {
 		}
 
 		.card-info-title {
-			@apply special-font uppercase md:text-6xl text-4xl font-black font-zentry-regular text-bbsu-blue-50 text-shadow;
+			@apply special-font uppercase md:text-6xl text-5xl font-black font-zentry-regular text-bbsu-blue-50 text-shadow;
 		}
 
 		.card-info-description {

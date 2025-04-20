@@ -18,41 +18,41 @@ export function Features() {
 				</p>
 			</div>
 
-			<div className="mx-auto mb-7 h-96 w-11/12">
+			<div className="mx-auto mb-7 h-[30rem] w-11/12 sm:h-96">
 				<ParallaxCard
 					src="videos/feature-1.mp4"
-					title="VideoCard"
-					description="A cross bla bla bla lorem ipsum dolor sit amet consectetur adipisicing elit."
+					title="The goal of a site"
+					description="...is to deliver information about the product and get the client's money. The user should understand where he got to in three to five seconds. Text on the site should be clear and answer the user's questions. It is important to combine informativeness and visual appeal. It is important to know your target audience and their needs."
 					isComingSoon
 				/>
 			</div>
 
 			<div className="mx-auto grid w-11/12 grid-cols-2 grid-rows-[repeat(4,auto)] gap-7">
-				<div className="col-span-2 row-span-1 h-96 md:col-span-1 md:row-span-2">
+				<div className="col-span-2 row-span-1 h-96 sm:h-[30rem] md:col-span-1 md:row-span-2">
 					<ParallaxCard
 						src="videos/feature-2.mp4"
-						title="VideoCard 2"
-						description="A cross bla bla bla lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit."
+						title="Social proof"
+						description="Things like reviews and ratings, the ability to contact real people to confirm the quality of the product are important for credibility. Simplifying the site and adding &rdquo;social proof&ldquo; improves conversion rates."
 					/>
 				</div>
 
-				<div className="col-span-2 row-span-1 h-96 sm:ms-20 md:col-span-1 md:row-span-2 md:ms-0 md:h-auto">
+				<div className="col-span-2 row-span-1 h-96 sm:ms-20 sm:h-[30rem] md:col-span-1 md:row-span-2 md:ms-0 md:h-auto">
 					<ParallaxCard
 						src="videos/feature-3.mp4"
-						title="VideoCard 3"
-						description="A cross bla bla bla lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit."
+						title="Improving accessibility"
+						description="Besides, behind all these “niceties” everyone forgets about users with disabilities. Better to spend this effort on improving accessibility (this project does not take into account users with limitations - this requires effort for which I will not be paid)."
 					/>
 				</div>
 
 				<div className="col-span-2 row-span-1 h-96 sm:me-14 md:col-span-1 md:row-span-2 md:me-0">
 					<ParallaxCard
 						src="videos/feature-4.mp4"
-						title="VideoCard 4"
-						description="A cross bla bla bla lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit."
+						title="Success"
+						description="The success of the project in a useful and functional product (service, service, etc.), and does not depend on its beauty."
 					/>
 				</div>
 
-				<div className="h-48 md:h-auto">
+				<div className="h-56 min-w-44 md:h-auto">
 					<ParallaxCard
 						title="More coming soon!"
 						decorativeElement={
@@ -61,7 +61,7 @@ export function Features() {
 					/>
 				</div>
 
-				<div className="h-48 md:h-auto">
+				<div className="h-56 min-w-44 md:h-auto">
 					<ParallaxCard src="videos/feature-5.mp4" />
 				</div>
 			</div>
