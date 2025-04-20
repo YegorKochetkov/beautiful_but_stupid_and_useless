@@ -18,7 +18,7 @@ export function Features() {
 				</p>
 			</div>
 
-			<div className="mx-auto mb-7 h-[30rem] w-11/12 sm:h-96">
+			<div className="mx-auto mb-7 h-[38rem] xs:h-[32rem] w-11/12 sm:h-96">
 				<ParallaxCard
 					src="videos/feature-1.mp4"
 					title="The goal of a site"

@@ -3,6 +3,9 @@ export default {
 	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
 	theme: {
 		extend: {
+			screens: {
+				xs: "400px",
+			},
 			fontFamily: {
 				"circular-web": ["circular-web", "sans-serif"],
 				"roboto-mono": ["roboto-mono", "sans-serif"],
