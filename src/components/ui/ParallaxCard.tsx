@@ -93,8 +93,9 @@ export const ParallaxCard = ({
 		// When the mouse is at the left/top edge, you get a negative rotation
 		// When the mouse is at the right/bottom edge, you get a positive rotation
 		// When the mouse is in the center, the rotation is 0
-		const xRotation = (xPercentage - 0.5) * (Math.PI * rotationXFactor);
-		const yRotation = -(yPercentage - 0.5) * (Math.PI * rotationYFactor);
+		const center = 0.5;
+		const xRotation = (xPercentage - center) * (Math.PI * rotationXFactor);
+		const yRotation = -(yPercentage - center) * (Math.PI * rotationYFactor);
 
 		const positionDecreaseFactor = 0.6;
 

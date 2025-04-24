@@ -2,6 +2,9 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import React from "react";
 
+import { lerpFactor, position, rotation, type Vec2 } from "../../lib/parallax";
+import { useBackgroundTiltByGyroscope } from "../../hooks/useBackgroundTiltByGyroscope";
+
 const heroVideosNumber = [1, 2, 3, 4] as const;
 
 export const VideoBackground = ({
@@ -30,16 +33,46 @@ export const VideoBackground = ({
 	const [currentVideoIndex, setCurrentVideoIndex] = React.useState(0);
 	const nextVideoIndex = (currentVideoIndex + 1) % totalHeroVideos;
 
-	React.useEffect(() => {
-		// 3-d tilt effect for the video button.
-		const handleMouseMove = (ev: MouseEvent) => {
-			const videoButton = document.querySelector<HTMLButtonElement>(
-				'button[data-is-button="true"]',
-			);
+	const videoButtonRef = React.useRef<HTMLButtonElement>(null);
 
-			if (!videoButton) return;
+	const setStyle = React.useCallback((rotation: Vec2, position: Vec2) => {
+		if (!videoButtonRef.current) return;
 
-			const buttonRect = videoButton.getBoundingClientRect();
+		videoButtonRef.current.style.setProperty(
+			"--x-position",
+			`${position.x.toFixed(2)}%`,
+		);
+		videoButtonRef.current.style.setProperty(
+			"--y-position",
+			`${position.y.toFixed(2)}%`,
+		);
+
+		videoButtonRef.current.style.setProperty(
+			"--x-rotation",
+			`${rotation.y.toFixed(2)}deg`,
+		);
+		videoButtonRef.current.style.setProperty(
+			"--y-rotation",
+			`${rotation.x.toFixed(2)}deg`,
+		);
+		// It's for the glare
+		const glareIncreaseFactor = 100;
+		videoButtonRef.current.style.setProperty(
+			"--x",
+			`${(position.x * glareIncreaseFactor).toFixed(2)}%`,
+		);
+		videoButtonRef.current.style.setProperty(
+			"--y",
+			`${(position.y * glareIncreaseFactor).toFixed(2)}%`,
+		);
+	}, []);
+
+	// 3-d tilt effect for the video button.
+	const handleMouseMove = React.useCallback(
+		(ev: MouseEvent) => {
+			if (!videoButtonRef.current) return;
+
+			const buttonRect = videoButtonRef.current.getBoundingClientRect();
 
 			const x = ev.clientX - buttonRect.left;
 			const y = ev.clientY - buttonRect.top;
@@ -58,22 +91,29 @@ export const VideoBackground = ({
 			// When the mouse is at the left/top edge, you get a negative rotation
 			// When the mouse is at the right/bottom edge, you get a positive rotation
 			// When the mouse is in the center, the rotation is 0
-			let xRotation = (xPercentage - 0.5) * 10;
-			let yRotation = (0.5 - yPercentage) * 10;
+			const center = 0.5;
+			const rotationIncreaseFactor = 10;
+			let xRotation = (xPercentage - center) * rotationIncreaseFactor;
+			let yRotation = -(yPercentage - center) * rotationIncreaseFactor;
 
-			// Maximum rotation is 25 degrees
+			// Maximum rotation is 17 degrees
 			xRotation =
-				Math.abs(xRotation) > 25 ? 25 * Math.sign(xRotation) : xRotation;
+				Math.abs(xRotation) > 17 ? 17 * Math.sign(xRotation) : xRotation;
 			yRotation =
-				Math.abs(yRotation) > 25 ? 25 * Math.sign(yRotation) : yRotation;
+				Math.abs(yRotation) > 17 ? 17 * Math.sign(yRotation) : yRotation;
 
-			videoButton.style.setProperty("--x-rotation", `${yRotation}deg`);
-			videoButton.style.setProperty("--y-rotation", `${xRotation}deg`);
-			// It's for the glare
-			videoButton.style.setProperty("--x", `${xPercentage * 80}%`);
-			videoButton.style.setProperty("--y", `${yPercentage * 60}%`);
-		};
+			rotation.target.set(xRotation, yRotation);
+			position.target.set(xPercentage, yPercentage);
 
+			rotation.current.interpolate(rotation.target, lerpFactor);
+			position.current.interpolate(position.target, lerpFactor);
+
+			setStyle(rotation.current, position.current);
+		},
+		[setStyle],
+	);
+
+	React.useEffect(() => {
 		const mouseMoveController = new AbortController();
 
 		document.addEventListener("mousemove", handleMouseMove, {
@@ -81,7 +121,7 @@ export const VideoBackground = ({
 		});
 
 		return () => mouseMoveController.abort();
-	}, []);
+	}, [handleMouseMove]);
 
 	useGSAP(
 		(_context, contextSafe) => {
@@ -177,6 +217,8 @@ export const VideoBackground = ({
 		},
 	);
 
+	useBackgroundTiltByGyroscope(setStyle);
+
 	const videoButtonStyle =
 		"hover-3d-effect size-44 z-50 rounded-xl border-2 border-bbsu-black-700 opacity-70 hover:opacity-100 transition-opacity duration-300 ease-in-out button-with-video-appearance";
 	const expandedVideoStyle =
@@ -204,6 +246,7 @@ export const VideoBackground = ({
 						key={videoNumber}
 						id={`video-${videoNumber}`}
 						data-is-button={isButton}
+						ref={isButton ? videoButtonRef : null}
 						data-is-expanded={isExpanded}
 						type="button"
 						aria-label="change background video"
