@@ -4,9 +4,14 @@ import React, { useRef } from "react";
 import { TiLocationArrow } from "react-icons/ti";
 
 import { Button } from "./Button";
-import { cn } from "../../lib/utils";
+import { cn, limitWithSign } from "../../lib/utils";
 
-import { rotation, position, type Vec2, lerpFactor } from "../../lib/parallax";
+import {
+	rotation,
+	position,
+	type Vec2,
+	interpolateFactor,
+} from "../../lib/parallax";
 import { useBackgroundTiltByGyroscope } from "../../hooks/useBackgroundTiltByGyroscope";
 
 export const ParallaxCard = ({
@@ -76,37 +81,41 @@ export const ParallaxCard = ({
 		const x = clientX - left;
 		const y = clientY - top;
 
-		const xPercentage = x / width;
-		const yPercentage = y / height;
+		const xPercentage = (x / width) * 100;
+		const yPercentage = (y / height) * 100;
 
-		const rotationXFactor = width < 700 ? 2 : 1;
-		const rotationYFactor = height < 600 ? 4 : 2;
-
-		// The subtraction of 0.5 is crucial for creating a centered rotation effect. Here's why:
-		// xPercentage and yPercentage represent the mouse position relative to the card, normalized between 0 and 1:
+		// The subtraction of 50 is crucial for creating a centered rotation effect. Here's why:
+		// xPercentage and yPercentage represent the mouse position relative to the card, normalized between 0 and 100:
 		// 0 is the left/top edge of the card
-		// 1 is the right/bottom edge of the card
-		// By subtracting 0.5, you shift the rotation point to the center of the card:
-		// Without -0.5, rotation would be from 0 to 1
-		// With -0.5, rotation is now from -0.5 to 0.5, centered around 0
-		// This means:
-		// When the mouse is at the left/top edge, you get a negative rotation
-		// When the mouse is at the right/bottom edge, you get a positive rotation
-		// When the mouse is in the center, the rotation is 0
-		const center = 0.5;
-		const xRotation = (xPercentage - center) * (Math.PI * rotationXFactor);
-		const yRotation = -(yPercentage - center) * (Math.PI * rotationYFactor);
+		// 100 is the right/bottom edge of the card
+		// By subtracting 50, you shift the rotation point to the center of the card:
+		// Without subtracting 50, rotation would be from 0 to 100
+		// With subtracting 50, rotation is now from -50 to 50, centered around 0
+		const center = 50;
+		let xRotation = xPercentage - center;
+		let yRotation = center - yPercentage;
 
-		const positionDecreaseFactor = 0.6;
+		// Limit the rotation in degrees
+		const maxDegreesX = width < 700 ? 4 : 2;
+		const maxDegreesY = height < 600 ? 6 : 3;
+
+		xRotation = limitWithSign(xRotation, maxDegreesX);
+		yRotation = limitWithSign(yRotation, maxDegreesY);
 
 		rotation.target.set(xRotation, yRotation);
+
+		// Shift background position
+		const positionShiftDecrease = 0.8;
 		position.target.set(
-			-xRotation * positionDecreaseFactor,
-			yRotation * positionDecreaseFactor,
+			xRotation * positionShiftDecrease,
+			yRotation * positionShiftDecrease,
 		);
 
-		rotation.current.interpolate(rotation.target, lerpFactor);
-		position.current.interpolate(position.target, lerpFactor);
+		// Rotate card
+		const rotationInterpolateFactor =
+			width < 700 || height < 400 ? 0.03 : interpolateFactor;
+		rotation.current.interpolate(rotation.target, rotationInterpolateFactor);
+		position.current.interpolate(position.target, rotationInterpolateFactor);
 
 		setStyle(rotation.current, position.current);
 	};
@@ -117,8 +126,8 @@ export const ParallaxCard = ({
 		rotation.current.set(0, 0);
 		position.current.set(0, 0);
 
-		rotation.current.interpolate(rotation.target, lerpFactor);
-		position.current.interpolate(position.target, lerpFactor);
+		rotation.current.interpolate(rotation.target, interpolateFactor);
+		position.current.interpolate(position.target, interpolateFactor);
 
 		setStyle(rotation.current, position.current);
 	};

@@ -2,8 +2,9 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import React from "react";
 
-import { lerpFactor, position, rotation, type Vec2 } from "../../lib/parallax";
+import { position, rotation, type Vec2 } from "../../lib/parallax";
 import { useBackgroundTiltByGyroscope } from "../../hooks/useBackgroundTiltByGyroscope";
+import { limitWithSign } from "../../lib/utils";
 
 const heroVideosNumber = [1, 2, 3, 4] as const;
 
@@ -69,7 +70,7 @@ export const VideoBackground = ({
 
 	// 3-d tilt effect for the video button.
 	const handleMouseMove = React.useCallback(
-		(ev: MouseEvent) => {
+		(ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 			if (!videoButtonRef.current) return;
 
 			const buttonRect = videoButtonRef.current.getBoundingClientRect();
@@ -77,51 +78,41 @@ export const VideoBackground = ({
 			const x = ev.clientX - buttonRect.left;
 			const y = ev.clientY - buttonRect.top;
 
-			const xPercentage = x / buttonRect.width;
-			const yPercentage = y / buttonRect.height;
+			const xPercentage = (x / buttonRect.width) * 100;
+			const yPercentage = (y / buttonRect.height) * 100;
 
-			// The subtraction of 0.5 is crucial for creating a centered rotation effect. Here's why:
-			// xPercentage and yPercentage represent the mouse position relative to the page, normalized between 0 and 1:
-			// 0 is the left/top edge of the page
-			// 1 is the right/bottom edge of the page
-			// By subtracting 0.5, you shift the rotation point to the center of the page:
-			// Without -0.5, rotation would be from 0 to 1
-			// With -0.5, rotation is now from -0.5 to 0.5, centered around 0
-			// This means:
-			// When the mouse is at the left/top edge, you get a negative rotation
-			// When the mouse is at the right/bottom edge, you get a positive rotation
-			// When the mouse is in the center, the rotation is 0
-			const center = 0.5;
-			const rotationIncreaseFactor = 10;
-			let xRotation = (xPercentage - center) * rotationIncreaseFactor;
-			let yRotation = -(yPercentage - center) * rotationIncreaseFactor;
+			// The subtraction of 50 is crucial for creating a centered rotation effect. Here's why:
+			// xPercentage and yPercentage represent the mouse position relative to the card, normalized between 0 and 100:
+			// 0 is the left/top edge of the card
+			// 100 is the right/bottom edge of the card
+			// By subtracting 50, you shift the rotation point to the center of the card:
+			// Without subtracting 50, rotation would be from 0 to 100
+			// With subtracting 50, rotation is now from -50 to 50, centered around 0
+			const center = 50;
+			let xRotation = xPercentage - center;
+			let yRotation = center - yPercentage;
 
-			// Maximum rotation is 17 degrees
-			xRotation =
-				Math.abs(xRotation) > 17 ? 17 * Math.sign(xRotation) : xRotation;
-			yRotation =
-				Math.abs(yRotation) > 17 ? 17 * Math.sign(yRotation) : yRotation;
+			// Limit background position shift
+			const maxShift = 6;
+			const xPosition = limitWithSign(xRotation, maxShift);
+			const yPosition = limitWithSign(yRotation, maxShift);
+
+			// Limit maximum rotation
+			const maxRotationDegrees = 17;
+			xRotation = limitWithSign(xRotation, maxRotationDegrees);
+			yRotation = limitWithSign(yRotation, maxRotationDegrees);
 
 			rotation.target.set(xRotation, yRotation);
-			position.target.set(xPercentage, yPercentage);
+			position.target.set(-xPosition, yPosition);
 
-			rotation.current.interpolate(rotation.target, lerpFactor);
-			position.current.interpolate(position.target, lerpFactor);
+			const interpolateFactor = 0.02;
+			rotation.current.interpolate(rotation.target, interpolateFactor);
+			position.current.interpolate(position.target, interpolateFactor);
 
 			setStyle(rotation.current, position.current);
 		},
 		[setStyle],
 	);
-
-	React.useEffect(() => {
-		const mouseMoveController = new AbortController();
-
-		document.addEventListener("mousemove", handleMouseMove, {
-			signal: mouseMoveController.signal,
-		});
-
-		return () => mouseMoveController.abort();
-	}, [handleMouseMove]);
 
 	useGSAP(
 		(_context, contextSafe) => {
@@ -226,7 +217,10 @@ export const VideoBackground = ({
 	const hiddenVideoStyle = `${videoButtonStyle} z-0 hidden`;
 
 	return (
-		<div className="video-elements-container absolute grid h-screen w-screen place-items-center [perspective:1000px]">
+		<div
+			onMouseMove={handleMouseMove}
+			className="video-elements-container absolute grid h-screen w-screen place-items-center [perspective:1000px]"
+		>
 			{heroVideosNumber.map((videoNumber) => {
 				const isExpanded = videoNumber === heroVideosNumber[currentVideoIndex];
 				const isButton = videoNumber === heroVideosNumber[nextVideoIndex];

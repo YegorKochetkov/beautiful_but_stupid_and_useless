@@ -27,7 +27,7 @@
  * and visually appealing.
  */
 export const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-export const lerpFactor = 0.06;
+export const interpolateFactor = 0.06;
 
 export interface Vec2 {
 	x: number;

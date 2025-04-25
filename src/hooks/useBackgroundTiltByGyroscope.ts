@@ -1,5 +1,6 @@
 import React from "react";
 import { position, rotation, type Vec2 } from "../lib/parallax";
+import { limitWithSign } from "../lib/utils";
 
 // Tilt effect by device orientation
 export const useBackgroundTiltByGyroscope = (
@@ -11,28 +12,14 @@ export const useBackgroundTiltByGyroscope = (
 		const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
 			if (event.beta === null || event.gamma === null) return;
 
-			// Normalize and limit the tilt angles
-			let xRotation =
-				Math.abs(event.gamma) > 10 ? 10 * Math.sign(event.gamma) : event.gamma;
-			let yRotation =
-				Math.abs(event.beta) > 10 ? 10 * Math.sign(event.beta) : event.beta;
+			// Limit background  position shift
+			const maxShift = 6;
+			const xPosition = limitWithSign(event.beta, maxShift);
+			const yPosition = limitWithSign(event.gamma, maxShift);
 
-			if (event.beta < 90) {
-				xRotation = -xRotation;
-			}
-			if (event.beta > 90) {
-				xRotation = 0 - xRotation;
-				yRotation = -yRotation;
-			}
-
-			const positionDecreaseFactor = 0.6;
-			const lerpFactor = 0.01;
-
-			position.target.set(
-				xRotation * positionDecreaseFactor,
-				yRotation * positionDecreaseFactor,
-			);
-			position.current.interpolate(position.target, lerpFactor);
+			const interpolateFactor = 0.02;
+			position.target.set(-yPosition, -xPosition);
+			position.current.interpolate(position.target, interpolateFactor);
 
 			setStyle(rotation.current, position.current);
 		};
