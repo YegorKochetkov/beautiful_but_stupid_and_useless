@@ -96,7 +96,7 @@ describe("useWindowScrollTop", () => {
 		expect(addEventListenerSpy).toHaveBeenCalledWith(
 			"scroll",
 			expect.any(Function),
-			expect.objectContaining({ signal: expect.anything() }),
+			expect.objectContaining({ signal: expect.any(Object) as AbortSignal }),
 		);
 
 		unmount();

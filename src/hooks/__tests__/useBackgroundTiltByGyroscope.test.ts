@@ -101,7 +101,7 @@ describe("useBackgroundTiltByGyroscope", () => {
 		expect(addEventListenerSpy).toHaveBeenCalledWith(
 			"deviceorientation",
 			expect.any(Function),
-			expect.objectContaining({ signal: expect.anything() }),
+			expect.objectContaining({ signal: expect.any(Object) as AbortSignal }),
 		);
 
 		unmount();
