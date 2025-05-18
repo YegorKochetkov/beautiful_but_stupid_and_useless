@@ -2,6 +2,7 @@ import { About } from "./components/About";
 import { Features } from "./components/Features";
 import { Hero } from "./components/Hero";
 import { Navbar } from "./components/Navbar";
+import { Story } from "./components/Story";
 import { AudioIndicator } from "./components/ui/AudioIndicator";
 import { Menu } from "./components/ui/Menu";
 import { MobileMenu } from "./components/ui/MobileMenu";
@@ -22,6 +23,7 @@ const App = () => {
 				<Hero />
 				<About />
 				<Features />
+				<Story />
 			</main>
 		</div>
 	);

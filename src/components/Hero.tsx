@@ -13,7 +13,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export function Hero() {
 	const heroComponent = React.useRef<HTMLDivElement>(null);
-	const [ allVideosLoaded, setAllVideosLoaded ] = React.useState(false);
+	const [allVideosLoaded, setAllVideosLoaded] = React.useState(false);
 
 	useGSAP(() => {
 		const tl = gsap.timeline({ paused: true });
@@ -77,7 +77,6 @@ function HeroHeader() {
 			<h1 className="font-black font-zentry-regular text-5xl text-bbsu-blue-100 uppercase sm:right-10 sm:text-7xl md:text-9xl lg:text-[12rem]">
 				<span className="relative">
 					<span className="special-font">
-
 						Be<span>au</span>tif<span>u</span>l
 					</span>
 					<span className="-bottom-5 sm:-bottom-6 md:-bottom-7 lg:-bottom-9 absolute left-0 font-robert-regular text-bbsu-blue-100 text-lg sm:text-2xl md:text-4xl lg:text-5xl">
