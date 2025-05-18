@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook } from "@testing-library/react";
-import { useBackgroundTiltByGyroscope } from "./useBackgroundTiltByGyroscope";
-import { position, rotation } from "../lib/parallax";
+import { useBackgroundTiltByGyroscope } from "../useBackgroundTiltByGyroscope";
+import { position, rotation } from "../../lib/parallax";
 
 describe("useBackgroundTiltByGyroscope", () => {
 	const mockDeviceOrientationEvent = (beta: number, gamma: number) => {
