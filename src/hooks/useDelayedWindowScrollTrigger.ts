@@ -32,14 +32,14 @@ export const useDelayedWindowScrollTrigger = (
 			timeoutId.current = id;
 		};
 
-		const scrollController = new AbortController();
+		const scrollAbortController = new AbortController();
 
 		window.addEventListener("scroll", handleScroll, {
-			signal: scrollController.signal,
+			signal: scrollAbortController.signal,
 		});
 
 		return () => {
-			scrollController.abort();
+			scrollAbortController.abort();
 
 			if (timeoutId.current) {
 				clearTimeout(timeoutId.current);

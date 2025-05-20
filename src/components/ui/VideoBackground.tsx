@@ -190,14 +190,14 @@ export const VideoBackground = ({
 				tl.play();
 			});
 
-			const nextVideoButtonController = new AbortController();
+			const nextVideoButtonAbortController = new AbortController();
 
 			nextVideoButton?.addEventListener("click", handleHeroMiniVideoClick, {
-				signal: nextVideoButtonController.signal,
+				signal: nextVideoButtonAbortController.signal,
 			});
 
 			return () => {
-				nextVideoButtonController.abort();
+				nextVideoButtonAbortController.abort();
 				tl.kill();
 			};
 		},

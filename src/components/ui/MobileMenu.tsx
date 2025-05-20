@@ -21,17 +21,17 @@ export function MobileMenu() {
 			}
 		};
 
-		const mobileMenuController = new AbortController();
+		const mobileMenuAbortController = new AbortController();
 
 		window.addEventListener("keydown", handleEscapeKey, {
-			signal: mobileMenuController.signal,
+			signal: mobileMenuAbortController.signal,
 		});
 		window.addEventListener("click", handleClickOutside, {
-			signal: mobileMenuController.signal,
+			signal: mobileMenuAbortController.signal,
 		});
 
 		return () => {
-			mobileMenuController.abort();
+			mobileMenuAbortController.abort();
 		};
 	}, []);
 
@@ -40,14 +40,14 @@ export function MobileMenu() {
 			<button
 				type="button"
 				onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-				className="font-general text-base text-blue-50 uppercase"
+				className="font-general text-base uppercase text-blue-50"
 			>
 				Menu
 			</button>
 
 			<div
 				className={cn(
-					"navbar-background absolute top-12 right-0 flex w-max flex-col gap-9 rounded-xl p-9 transition-all duration-700 [&_ul]:flex-col [&_ul]:gap-9",
+					"navbar-background absolute right-0 top-12 flex w-max flex-col gap-9 rounded-xl p-9 transition-all duration-700 [&_ul]:flex-col [&_ul]:gap-9",
 					{
 						hidden: !isMobileMenuOpen,
 						"animate-slide-left": isMobileMenuOpen,

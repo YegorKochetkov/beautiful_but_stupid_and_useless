@@ -24,14 +24,14 @@ export const useBackgroundTiltByGyroscope = (
 			setStyle(rotation.current, position.current);
 		};
 
-		const deviceOrientationController = new AbortController();
+		const deviceOrientationAbortController = new AbortController();
 
 		window.addEventListener("deviceorientation", handleDeviceOrientation, {
-			signal: deviceOrientationController.signal,
+			signal: deviceOrientationAbortController.signal,
 		});
 
 		return () => {
-			deviceOrientationController.abort();
+			deviceOrientationAbortController.abort();
 		};
 	}, [setStyle]);
 };
