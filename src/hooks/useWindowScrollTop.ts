@@ -11,11 +11,13 @@ export const useWindowScrollTop = (triggerShift: number) => {
 
 		const scrollAbortController = new AbortController();
 
-		window.addEventListener("scroll", handleScroll, { signal: scrollAbortController.signal });
+		window.addEventListener("scroll", handleScroll, {
+			signal: scrollAbortController.signal,
+		});
 
 		return () => {
 			scrollAbortController.abort();
-		}
+		};
 	}, [triggerShift]);
 
 	return { scrolledFromTop };

@@ -50,24 +50,25 @@ body {
 	}
 
 	.text-shadow {
-		text-shadow: 0 0 0.15em #000, 0 0 0.15em #000, 0 0 0.15em #000,
+		text-shadow:
+			0 0 0.15em #000,
+			0 0 0.15em #000,
+			0 0 0.15em #000,
 			0 0 0.15em #000;
 	}
 	.svg-shadow {
-		-webkit-filter: drop-shadow(1px 1px 3px #000) drop-shadow(-1px -1px 3px #000)
-			drop-shadow(1px -1px 3px #000);
+		-webkit-filter: drop-shadow(1px 1px 3px #000)
+			drop-shadow(-1px -1px 3px #000) drop-shadow(1px -1px 3px #000);
 		filter: drop-shadow(1px 1px 3px #000) drop-shadow(-1px -1px 3px #000)
 			drop-shadow(1px -1px 3px #000);
 	}
 
 	.hover-3d-effect {
 		--glare-opacity: 0.3;
-		@apply [transform:rotateX(var(--x-rotation))_rotateY(var(--y-rotation))]
-			after:content-[""] after:absolute
-			after:inset-0 after:pointer-events-none
-			after:bg-[radial-gradient(at_var(--x)_var(--y),rgba(255,255,255)_10%,transparent_70%)] after:opacity-[var(--glare-opacity)];
+		@apply [transform:rotateX(var(--x-rotation))_rotateY(var(--y-rotation))] after:pointer-events-none after:absolute after:inset-0 after:bg-[radial-gradient(at_var(--x)_var(--y),rgba(255,255,255)_10%,transparent_70%)] after:opacity-[var(--glare-opacity)] after:content-[""];
 		& video {
-			transform: scale(1.2) translate3d(var(--x-position), var(--y-position), 0);
+			transform: scale(1.2)
+				translate3d(var(--x-position), var(--y-position), 0);
 		}
 	}
 }
@@ -86,7 +87,8 @@ body {
 
 	.animated-word {
 		@apply opacity-0;
-		transform: translate3d(10px, 50px, -60px) rotateY(-60deg) rotateX(-40deg);
+		transform: translate3d(10px, 50px, -60px) rotateY(-60deg)
+			rotateX(-40deg);
 		transform-origin: 50% 50% -130px;
 		will-change: opacity, transform;
 	}
@@ -98,7 +100,7 @@ body {
 	}
 
 	.button {
-		@apply flex justify-center items-center gap-1 bg-violet-50 py-3 px-4 sm:px-7 text-black text-sm sm:text-base md:text-lg lg:text-xl uppercase font-roboto-mono [&_span]:text-base sm:[&_span]:text-lg md:[&_span]:text-xl lg:[&_span]:text-2xl w-fit relative cursor-pointer rounded-full;
+		@apply relative flex w-fit cursor-pointer items-center justify-center gap-1 rounded-full bg-violet-50 px-4 py-3 font-roboto-mono text-sm uppercase text-black sm:px-7 sm:text-base md:text-lg lg:text-xl [&_span]:text-base sm:[&_span]:text-lg md:[&_span]:text-xl lg:[&_span]:text-2xl;
 	}
 	.button span {
 		@apply transition-transform;
@@ -112,10 +114,10 @@ body {
 		@apply bg-bbsu-yellow-300 text-bbsu-black-700;
 	}
 	.nav-button {
-		@apply py-1 px-5 bg-blue-50 text-sm sm:text-base [&_span]:text-lg sm:[&_span]:text-lg md:[&_span]:text-lg lg:[&_span]:text-lg;
+		@apply bg-blue-50 px-5 py-1 text-sm sm:text-base [&_span]:text-lg sm:[&_span]:text-lg md:[&_span]:text-lg lg:[&_span]:text-lg;
 	}
 	.video-card-button {
-		@apply mt-3 max-w-64 gap-2 text-base md:text-lg bg-bbsu-black-700 text-bbsu-blue-100 py-2 px-4 pr-10 rounded-full;
+		@apply mt-3 max-w-64 gap-2 rounded-full bg-bbsu-black-700 px-4 py-2 pr-10 text-base text-bbsu-blue-100 md:text-lg;
 	}
 
 	/* HTML: <div class="loader"></div> */
@@ -145,7 +147,7 @@ body {
 	}
 
 	.music-indicator-line {
-		@apply h-3 w-1 rounded-full bg-white transition-all duration-200 ease-in-out origin-center;
+		@apply h-3 w-1 origin-center rounded-full bg-white transition-all duration-200 ease-in-out;
 	}
 	.music-indicator-line.active {
 		--animation-order: 1;
@@ -276,9 +278,10 @@ body {
 		}
 
 		.card-info-text-wrapper {
-			@apply flex flex-col justify-between z-10 h-full;
+			@apply z-10 flex h-full flex-col justify-between;
 
-			transition: var(--slide-transition-duration) var(--slide-transition-easing);
+			transition: var(--slide-transition-duration)
+				var(--slide-transition-easing);
 			transition-property: transform;
 		}
 
@@ -287,11 +290,11 @@ body {
 		}
 
 		.card-info-title {
-			@apply special-font uppercase md:text-6xl text-5xl font-black font-zentry-regular text-bbsu-blue-50 text-shadow;
+			@apply special-font text-shadow font-zentry-regular text-5xl font-black uppercase text-bbsu-blue-50 md:text-6xl;
 		}
 
 		.card-info-description {
-			@apply mt-5 md:max-w-prose text-lg md:text-xl text-shadow text-bbsu-blue-50;
+			@apply text-shadow mt-5 text-lg text-bbsu-blue-50 md:max-w-prose md:text-xl;
 		}
 	}
 }

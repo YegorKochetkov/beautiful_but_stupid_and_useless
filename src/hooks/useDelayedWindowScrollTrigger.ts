@@ -40,7 +40,6 @@ export const useDelayedWindowScrollTrigger = (
 
 		return () => {
 			scrollAbortController.abort();
-
 			if (timeoutId.current) {
 				clearTimeout(timeoutId.current);
 			}

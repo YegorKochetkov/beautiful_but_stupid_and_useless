@@ -146,7 +146,10 @@ export const VideoBackground = ({
 					{
 						onstart: () => {
 							if (nextVideoButton) {
-								nextVideoButton.style.setProperty("--glare-opacity", "0");
+								nextVideoButton.style.setProperty(
+									"--glare-opacity",
+									"0",
+								);
 							}
 
 							// Play expanding video from the beginning
@@ -155,7 +158,10 @@ export const VideoBackground = ({
 								videoElementInNextVideoButton
 									.play()
 									.catch((err) =>
-										console.warn("Error start playing video: ", err),
+										console.warn(
+											"Error start playing video: ",
+											err,
+										),
 									);
 							}
 						},
@@ -172,7 +178,10 @@ export const VideoBackground = ({
 						onComplete: () => {
 							if (nextVideoButton) {
 								nextVideoButton.disabled = false;
-								nextVideoButton.style.setProperty("--glare-opacity", "0.3");
+								nextVideoButton.style.setProperty(
+									"--glare-opacity",
+									"0.3",
+								);
 							}
 							// Pause previously expanded video after next video is expanded
 							if (videoElementInExpandedVideo) {
@@ -181,7 +190,8 @@ export const VideoBackground = ({
 							}
 
 							setCurrentVideoIndex(
-								(videoIndex) => (videoIndex + 1) % totalHeroVideos,
+								(videoIndex) =>
+									(videoIndex + 1) % totalHeroVideos,
 							);
 						},
 					},
@@ -192,9 +202,13 @@ export const VideoBackground = ({
 
 			const nextVideoButtonAbortController = new AbortController();
 
-			nextVideoButton?.addEventListener("click", handleHeroMiniVideoClick, {
-				signal: nextVideoButtonAbortController.signal,
-			});
+			nextVideoButton?.addEventListener(
+				"click",
+				handleHeroMiniVideoClick,
+				{
+					signal: nextVideoButtonAbortController.signal,
+				},
+			);
 
 			return () => {
 				nextVideoButtonAbortController.abort();
@@ -222,8 +236,10 @@ export const VideoBackground = ({
 			className="video-elements-container absolute grid h-screen w-screen place-items-center [perspective:1000px]"
 		>
 			{heroVideosNumber.map((videoNumber) => {
-				const isExpanded = videoNumber === heroVideosNumber[currentVideoIndex];
-				const isButton = videoNumber === heroVideosNumber[nextVideoIndex];
+				const isExpanded =
+					videoNumber === heroVideosNumber[currentVideoIndex];
+				const isButton =
+					videoNumber === heroVideosNumber[nextVideoIndex];
 
 				let styles = hiddenVideoStyle;
 
