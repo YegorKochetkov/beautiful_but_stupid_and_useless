@@ -3,6 +3,11 @@ import { renderHook, act } from "@testing-library/react";
 import { useDelayedWindowScrollTrigger } from "../useDelayedWindowScrollTrigger";
 
 describe("useDelayedWindowScrollTrigger", () => {
+	const originalScrollYDescriptor = Object.getOwnPropertyDescriptor(
+		window,
+		"scrollY",
+	);
+
 	beforeEach(() => {
 		vi.useFakeTimers();
 		Object.defineProperty(window, "scrollY", {
@@ -14,15 +19,22 @@ describe("useDelayedWindowScrollTrigger", () => {
 	afterEach(() => {
 		vi.restoreAllMocks();
 		vi.useRealTimers();
+		if (originalScrollYDescriptor) {
+			Object.defineProperty(window, "scrollY", originalScrollYDescriptor);
+		}
 	});
 
 	it("should initialize with scrollStopped as true", () => {
-		const { result } = renderHook(() => useDelayedWindowScrollTrigger(10, 200));
+		const { result } = renderHook(() =>
+			useDelayedWindowScrollTrigger(10, 200),
+		);
 		expect(result.current.scrollStopped).toBe(true);
 	});
 
 	it("should set scrollStopped to false when scroll is triggered", () => {
-		const { result } = renderHook(() => useDelayedWindowScrollTrigger(10, 200));
+		const { result } = renderHook(() =>
+			useDelayedWindowScrollTrigger(10, 200),
+		);
 
 		window.scrollY = 20;
 		act(() => {
@@ -33,7 +45,9 @@ describe("useDelayedWindowScrollTrigger", () => {
 	});
 
 	it("should not set scrollStopped to false when scroll is less than triggerShift", () => {
-		const { result } = renderHook(() => useDelayedWindowScrollTrigger(10, 200));
+		const { result } = renderHook(() =>
+			useDelayedWindowScrollTrigger(10, 200),
+		);
 
 		window.scrollY = 5;
 		act(() => {
@@ -44,7 +58,9 @@ describe("useDelayedWindowScrollTrigger", () => {
 	});
 
 	it("should set scrollStopped back to true after delay", () => {
-		const { result } = renderHook(() => useDelayedWindowScrollTrigger(10, 200));
+		const { result } = renderHook(() =>
+			useDelayedWindowScrollTrigger(10, 200),
+		);
 
 		window.scrollY = 20;
 		act(() => {
@@ -61,7 +77,9 @@ describe("useDelayedWindowScrollTrigger", () => {
 	});
 
 	it("should reset timeout on multiple scroll events", () => {
-		const { result } = renderHook(() => useDelayedWindowScrollTrigger(10, 200));
+		const { result } = renderHook(() =>
+			useDelayedWindowScrollTrigger(10, 200),
+		);
 
 		window.scrollY = 20;
 		act(() => {

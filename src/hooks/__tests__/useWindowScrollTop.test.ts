@@ -3,6 +3,10 @@ import { renderHook, act } from "@testing-library/react";
 import { useWindowScrollTop } from "../useWindowScrollTop";
 
 describe("useWindowScrollTop", () => {
+	const originalScrollYDescriptor = Object.getOwnPropertyDescriptor(
+		window,
+		"scrollY",
+	);
 	const triggerShift = 100;
 
 	beforeEach(() => {
@@ -18,6 +22,9 @@ describe("useWindowScrollTop", () => {
 
 	afterEach(() => {
 		vi.restoreAllMocks();
+		if (originalScrollYDescriptor) {
+			Object.defineProperty(window, "scrollY", originalScrollYDescriptor);
+		}
 	});
 
 	it("should initialize with scrolledFromTop as false", () => {
