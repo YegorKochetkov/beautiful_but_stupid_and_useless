@@ -114,8 +114,14 @@ export const ParallaxCard = ({
 		// Rotate card
 		const rotationInterpolateFactor =
 			width < 700 || height < 400 ? 0.03 : interpolateFactor;
-		rotation.current.interpolate(rotation.target, rotationInterpolateFactor);
-		position.current.interpolate(position.target, rotationInterpolateFactor);
+		rotation.current.interpolate(
+			rotation.target,
+			rotationInterpolateFactor,
+		);
+		position.current.interpolate(
+			position.target,
+			rotationInterpolateFactor,
+		);
 
 		setStyle(rotation.current, position.current);
 	};
@@ -143,9 +149,18 @@ export const ParallaxCard = ({
 		>
 			{/* Card background */}
 			<div className="background-wrapper">
-				<div className="background-inner-wrapper" ref={backgroundWrapperRef}>
+				<div
+					className="background-inner-wrapper"
+					ref={backgroundWrapperRef}
+				>
 					<div className="video-wrapper overflow-hidden rounded-lg border border-white/20 bg-bbsu-violet-300">
-						<video src={src} autoPlay muted loop className="video" />
+						<video
+							src={src}
+							autoPlay
+							muted
+							loop
+							className="video"
+						/>
 					</div>
 				</div>
 			</div>
@@ -158,7 +173,9 @@ export const ParallaxCard = ({
 							<h2 className="card-info-title">
 								<span>{title}</span>
 							</h2>
-							<p className="card-info-description">{description}</p>
+							<p className="card-info-description">
+								{description}
+							</p>
 						</div>
 						{isComingSoon ? (
 							<Button

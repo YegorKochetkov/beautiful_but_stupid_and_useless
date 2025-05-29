@@ -25,10 +25,12 @@ export const useBackgroundTiltByGyroscope = (
 		};
 
 		const deviceOrientationAbortController = new AbortController();
-
-		window.addEventListener("deviceorientation", handleDeviceOrientation, {
+		const opts = {
 			signal: deviceOrientationAbortController.signal,
-		});
+			passive: true,
+		};
+
+		window.addEventListener("deviceorientation", handleDeviceOrientation, opts);
 
 		return () => {
 			deviceOrientationAbortController.abort();

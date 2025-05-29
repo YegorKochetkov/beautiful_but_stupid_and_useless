@@ -10,10 +10,9 @@ export const useWindowScrollTop = (triggerShift: number) => {
 		};
 
 		const scrollAbortController = new AbortController();
+		const opts = { signal: scrollAbortController.signal, passive: true };
 
-		window.addEventListener("scroll", handleScroll, {
-			signal: scrollAbortController.signal,
-		});
+		window.addEventListener("scroll", handleScroll, opts);
 
 		return () => {
 			scrollAbortController.abort();

@@ -5,38 +5,37 @@ export const useDelayedWindowScrollTrigger = (
 	delay: number,
 ) => {
 	const [scrollStopped, setScrollStopped] = React.useState<boolean>(true);
-
 	const prevScrollY = React.useRef(0);
 	const timeoutId = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
+	const handleScroll = React.useCallback(() => {
+		if (typeof window === "undefined") return;
+
+		const currentScrollY = window.scrollY;
+		const isScrollTriggered =
+			Math.abs(currentScrollY - prevScrollY.current) >= triggerShift;
+
+		if (isScrollTriggered) {
+			setScrollStopped(false);
+		}
+
+		if (timeoutId.current) {
+			clearTimeout(timeoutId.current);
+		}
+
+		timeoutId.current = setTimeout(() => {
+			prevScrollY.current = currentScrollY;
+			setScrollStopped(true);
+		}, delay);
+	}, [triggerShift, delay]);
+
 	React.useEffect(() => {
-		const handleScroll = () => {
-			const currentScrollY = window.scrollY;
-			const isScrollTriggered =
-				currentScrollY >= prevScrollY.current + triggerShift ||
-				currentScrollY < prevScrollY.current - triggerShift;
-
-			if (isScrollTriggered) {
-				setScrollStopped(false);
-			}
-
-			if (timeoutId.current) {
-				clearTimeout(timeoutId.current);
-			}
-
-			const id = setTimeout(() => {
-				prevScrollY.current = currentScrollY;
-				setScrollStopped(true);
-			}, delay);
-
-			timeoutId.current = id;
-		};
+		if (typeof window === "undefined") return;
 
 		const scrollAbortController = new AbortController();
+		const opts = { signal: scrollAbortController.signal, passive: true };
 
-		window.addEventListener("scroll", handleScroll, {
-			signal: scrollAbortController.signal,
-		});
+		window.addEventListener("scroll", handleScroll, opts);
 
 		return () => {
 			scrollAbortController.abort();
@@ -44,7 +43,7 @@ export const useDelayedWindowScrollTrigger = (
 				clearTimeout(timeoutId.current);
 			}
 		};
-	}, [triggerShift, delay]);
+	}, [handleScroll]);
 
 	return { scrollStopped };
 };
