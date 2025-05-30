@@ -32,7 +32,6 @@ export const useBackgroundTiltByGyroscope = (
 		const deviceOrientationAbortController = new AbortController();
 		const opts = {
 			signal: deviceOrientationAbortController.signal,
-			passive: true,
 		};
 
 		window.addEventListener("deviceorientation", handleDeviceOrientation, opts);

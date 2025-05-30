@@ -32,7 +32,7 @@ export const useWindowScrollTop = (
 		};
 
 		const scrollAbortController = new AbortController();
-		const opts = { signal: scrollAbortController.signal, passive: true };
+		const opts = { signal: scrollAbortController.signal };
 
 		window.addEventListener("scroll", handleScroll, opts);
 
