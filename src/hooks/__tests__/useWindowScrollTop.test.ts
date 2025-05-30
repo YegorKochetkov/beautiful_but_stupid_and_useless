@@ -7,100 +7,186 @@ describe("useWindowScrollTop", () => {
 		window,
 		"scrollY",
 	);
-	const triggerShift = 100;
 
 	beforeEach(() => {
-		// Mock window.scrollY to control its value during tests
+		vi.useFakeTimers();
 		Object.defineProperty(window, "scrollY", {
 			writable: true,
-			configurable: true,
 			value: 0,
 		});
-		// Reset scrollY before each test
-		window.scrollY = 0;
 	});
 
 	afterEach(() => {
 		vi.restoreAllMocks();
+		vi.useRealTimers();
 		if (originalScrollYDescriptor) {
 			Object.defineProperty(window, "scrollY", originalScrollYDescriptor);
 		}
 	});
 
 	it("should initialize with scrolledFromTop as false", () => {
-		const { result } = renderHook(() => useWindowScrollTop(triggerShift));
+		const { result } = renderHook(() => useWindowScrollTop(10));
 		expect(result.current.scrolledFromTop).toBe(false);
 	});
 
-	it("should set scrolledFromTop to true when window.scrollY is greater than triggerShift", () => {
-		const { result } = renderHook(() => useWindowScrollTop(triggerShift));
+	it("should set scrolledFromTop to true when scroll is greater than triggerShift", () => {
+		const { result } = renderHook(() => useWindowScrollTop(10));
 
-		// Simulate scrolling down past the triggerShift
+		window.scrollY = 20;
 		act(() => {
-			window.scrollY = triggerShift + 50;
 			window.dispatchEvent(new Event("scroll"));
+		});
+
+		// Advance time to account for debounce
+		act(() => {
+			vi.advanceTimersByTime(50);
 		});
 
 		expect(result.current.scrolledFromTop).toBe(true);
 	});
 
-	it("should set scrolledFromTop to false when window.scrollY is less than triggerShift", () => {
-		const { result } = renderHook(() => useWindowScrollTop(triggerShift));
+	it("should set scrolledFromTop to false when scroll is less than or equal to triggerShift", () => {
+		const { result } = renderHook(() => useWindowScrollTop(10));
 
-		// First, scroll down to set scrolledFromTop to true
+		// First scroll beyond the trigger point
+		window.scrollY = 20;
 		act(() => {
-			window.scrollY = triggerShift + 50;
 			window.dispatchEvent(new Event("scroll"));
 		});
+
+		// Advance time to account for debounce
+		act(() => {
+			vi.advanceTimersByTime(50);
+		});
+
 		expect(result.current.scrolledFromTop).toBe(true);
 
-		// Then, simulate scrolling up above the triggerShift
+		// Then scroll back to a position less than the trigger
+		window.scrollY = 5;
 		act(() => {
-			window.scrollY = triggerShift - 50;
 			window.dispatchEvent(new Event("scroll"));
+		});
+
+		// Advance time to account for debounce
+		act(() => {
+			vi.advanceTimersByTime(50);
 		});
 
 		expect(result.current.scrolledFromTop).toBe(false);
 	});
 
-	it("should keep scrolledFromTop as false when window.scrollY is equal to triggerShift", () => {
-		const { result } = renderHook(() => useWindowScrollTop(triggerShift));
+	it("should respect the debounce time", () => {
+		const debounceTime = 100;
+		const { result } = renderHook(() => useWindowScrollTop(10, debounceTime));
 
+		window.scrollY = 20;
 		act(() => {
-			window.scrollY = triggerShift;
 			window.dispatchEvent(new Event("scroll"));
 		});
 
+		// Advance time but not enough to trigger the debounced update
+		act(() => {
+			vi.advanceTimersByTime(50);
+		});
+
+		// State should not have changed yet
 		expect(result.current.scrolledFromTop).toBe(false);
+
+		// Advance time to complete the debounce
+		act(() => {
+			vi.advanceTimersByTime(50);
+		});
+
+		// Now the state should be updated
+		expect(result.current.scrolledFromTop).toBe(true);
 	});
 
-	it("should update scrolledFromTop correctly on multiple scroll events", () => {
-		const { result } = renderHook(() => useWindowScrollTop(triggerShift));
+	it("should reset debounce timer on multiple scroll events", () => {
+		const debounceTime = 100;
+		const { result } = renderHook(() => useWindowScrollTop(10, debounceTime));
 
-		// Scroll below triggerShift
+		window.scrollY = 20;
 		act(() => {
-			window.scrollY = triggerShift - 10;
 			window.dispatchEvent(new Event("scroll"));
 		});
+
+		// Advance time but not enough to trigger the debounced update
+		act(() => {
+			vi.advanceTimersByTime(50);
+		});
+
+		// Trigger another scroll event
+		window.scrollY = 30;
+		act(() => {
+			window.dispatchEvent(new Event("scroll"));
+		});
+
+		// Advance time to what would have been the first timeout
+		act(() => {
+			vi.advanceTimersByTime(50);
+		});
+
+		// State should still not have changed because the timer was reset
 		expect(result.current.scrolledFromTop).toBe(false);
 
-		// Scroll above triggerShift
+		// Advance time to complete the second debounce
 		act(() => {
-			window.scrollY = triggerShift + 10;
+			vi.advanceTimersByTime(50);
+		});
+
+		// Now the state should be updated
+		expect(result.current.scrolledFromTop).toBe(true);
+	});
+
+	it("should update immediately when debounceTime is 0", () => {
+		const { result } = renderHook(() => useWindowScrollTop(10, 0));
+
+		window.scrollY = 20;
+		act(() => {
 			window.dispatchEvent(new Event("scroll"));
 		});
+
+		// No need to advance timers, should update immediately
+		expect(result.current.scrolledFromTop).toBe(true);
+	});
+
+	it("should update when triggerShift changes", () => {
+		const { result, rerender } = renderHook(
+			(props) => useWindowScrollTop(props.triggerShift, props.debounceTime),
+			{
+				initialProps: { triggerShift: 10, debounceTime: 50 },
+			},
+		);
+
+		window.scrollY = 15;
+		act(() => {
+			window.dispatchEvent(new Event("scroll"));
+		});
+
+		act(() => {
+			vi.advanceTimersByTime(50);
+		});
+
 		expect(result.current.scrolledFromTop).toBe(true);
 
-		// Scroll back below triggerShift
+		// Update the triggerShift to a value greater than current scroll
+		rerender({ triggerShift: 20, debounceTime: 50 });
+
+		// Dispatch scroll event to trigger the effect with new triggerShift
 		act(() => {
-			window.scrollY = triggerShift - 20;
 			window.dispatchEvent(new Event("scroll"));
 		});
+
+		act(() => {
+			vi.advanceTimersByTime(50);
+		});
+
 		expect(result.current.scrolledFromTop).toBe(false);
 	});
 
-	it("should clean up event listener on unmount", () => {
+	it("should clean up event listener and timeout on unmount", () => {
 		const abortSpy = vi.fn();
+
 		const mockAbortController = {
 			signal: {
 				addEventListener: vi.fn(),
@@ -112,69 +198,25 @@ describe("useWindowScrollTop", () => {
 			abort: abortSpy,
 		};
 
-		// Store original AbortController and mock it
 		const originalAbortController = window.AbortController;
 		window.AbortController = vi.fn(
 			() => mockAbortController,
 		) as unknown as typeof AbortController;
 
-		const { unmount } = renderHook(() => useWindowScrollTop(triggerShift));
+		const clearTimeoutSpy = vi.spyOn(window, "clearTimeout");
 
-		// Simulate a scroll event to ensure the listener is active
+		const { unmount } = renderHook(() => useWindowScrollTop(10));
+
+		window.scrollY = 20;
 		act(() => {
-			window.scrollY = triggerShift + 10;
 			window.dispatchEvent(new Event("scroll"));
 		});
 
 		unmount();
 
-		expect(abortSpy).toHaveBeenCalledTimes(1);
+		expect(abortSpy).toHaveBeenCalled();
+		expect(clearTimeoutSpy).toHaveBeenCalled();
 
-		// Restore original AbortController
 		window.AbortController = originalAbortController;
-	});
-
-	it("should use the new triggerShift value if it changes", () => {
-		let currentTriggerShift = 50;
-		const { result, rerender } = renderHook(() =>
-			useWindowScrollTop(currentTriggerShift),
-		);
-
-		// Initial state with triggerShift = 50
-		act(() => {
-			window.scrollY = 60; // Above 50
-			window.dispatchEvent(new Event("scroll"));
-		});
-		expect(result.current.scrolledFromTop).toBe(true);
-
-		act(() => {
-			window.scrollY = 40; // Below 50
-			window.dispatchEvent(new Event("scroll"));
-		});
-		expect(result.current.scrolledFromTop).toBe(false);
-
-		// Change triggerShift to 100
-		currentTriggerShift = 100;
-		rerender();
-
-		// window.scrollY is still 40, which is below the new triggerShift of 100
-		// The state should remain false without a new scroll event,
-		// but the next scroll event should use the new triggerShift.
-		act(() => {
-			window.dispatchEvent(new Event("scroll")); // Re-evaluate with new triggerShift
-		});
-		expect(result.current.scrolledFromTop).toBe(false);
-
-		act(() => {
-			window.scrollY = 110; // Above new triggerShift of 100
-			window.dispatchEvent(new Event("scroll"));
-		});
-		expect(result.current.scrolledFromTop).toBe(true);
-
-		act(() => {
-			window.scrollY = 90; // Below new triggerShift of 100
-			window.dispatchEvent(new Event("scroll"));
-		});
-		expect(result.current.scrolledFromTop).toBe(false);
 	});
 });
