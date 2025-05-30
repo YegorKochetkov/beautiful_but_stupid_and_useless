@@ -1,0 +1,13 @@
+name: Project rule
+version: 0.0.1
+schema: v1
+rules:
+  project-rules:
+    general-code-style-formatting:
+      - Use PascalCase for React component file names (e.g., UserCard.tsx, not user-card.tsx).
+      - Prefer named exports for components.
+      - Use functional and declarative programming patterns; avoid classes and OOP approach.
+      - Prefer iteration and modularization over code duplication.
+    styling-ui:
+      - Use Tailwind CSS for styling.
+      - Use GSAP for animations.

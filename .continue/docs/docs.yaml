@@ -1,0 +1,11 @@
+name: Project doc
+version: 0.0.1
+schema: v1
+docs:
+  - name: GSAP
+    description: A library for creating animations and transitions in web applications.
+    url: https://gsap.com/docs/v3/
+
+  - name: Tailwind CSS
+    description: A utility-first CSS framework that makes it easy to build custom user interfaces.
+    url: https://tailwindcss.com/docs
