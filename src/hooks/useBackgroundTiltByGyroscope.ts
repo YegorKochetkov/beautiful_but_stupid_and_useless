@@ -2,7 +2,12 @@ import React from "react";
 import { position, rotation, type Vec2 } from "../lib/parallax";
 import { limitWithSign } from "../lib/utils";
 
-// Tilt effect by device orientation
+/**
+ * A hook that applies a tilt effect to the background based on device orientation.
+ * 
+ * @param setStyle - A function to update the style with rotation and position values
+ * @returns void
+ */
 export const useBackgroundTiltByGyroscope = (
 	setStyle: (rotation: Vec2, position: Vec2) => void,
 ) => {

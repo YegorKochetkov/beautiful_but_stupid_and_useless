@@ -1,8 +1,15 @@
 import React from "react";
 
+/**
+ * A hook that tracks when scrolling has stopped after a specified delay.
+ * 
+ * @param triggerShift - The number of pixels to scroll before triggering the state change
+ * @param debounceTime - The delay in milliseconds before considering scrolling as stopped
+ * @returns An object containing the scrollStopped state
+ */
 export const useDelayedWindowScrollTrigger = (
 	triggerShift: number,
-	delay: number,
+	debounceTime: number,
 ) => {
 	const [scrollStopped, setScrollStopped] = React.useState<boolean>(true);
 	const prevScrollY = React.useRef(0);
@@ -26,8 +33,8 @@ export const useDelayedWindowScrollTrigger = (
 		timeoutId.current = setTimeout(() => {
 			prevScrollY.current = currentScrollY;
 			setScrollStopped(true);
-		}, delay);
-	}, [triggerShift, delay]);
+		}, debounceTime);
+	}, [triggerShift, debounceTime]);
 
 	React.useEffect(() => {
 		if (typeof window === "undefined") return;

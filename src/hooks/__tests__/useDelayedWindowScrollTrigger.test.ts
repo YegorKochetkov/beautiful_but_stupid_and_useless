@@ -57,7 +57,7 @@ describe("useDelayedWindowScrollTrigger", () => {
 		expect(result.current.scrollStopped).toBe(true);
 	});
 
-	it("should set scrollStopped back to true after delay", () => {
+	it("should set scrollStopped back to true after debounceTime", () => {
 		const { result } = renderHook(() =>
 			useDelayedWindowScrollTrigger(10, 200),
 		);
