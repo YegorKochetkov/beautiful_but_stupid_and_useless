@@ -14,7 +14,7 @@ export function AudioIndicator() {
 
 	React.useEffect(() => {
 		if (isAudioPlaying) {
-			audioElementRef.current?.play().catch((error) => {
+			audioElementRef.current?.play().catch((error: unknown) => {
 				console.error("Error playing audio:", error);
 			});
 		} else {

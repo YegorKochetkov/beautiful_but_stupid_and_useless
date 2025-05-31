@@ -70,7 +70,7 @@ export const VideoBackground = ({
 
 	// 3-d tilt effect for the video button.
 	const handleMouseMove = React.useCallback(
-		(ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+		(ev: React.MouseEvent<HTMLDivElement>) => {
 			if (!videoButtonRef.current) return;
 
 			const buttonRect = videoButtonRef.current.getBoundingClientRect();
@@ -157,12 +157,12 @@ export const VideoBackground = ({
 								videoElementInNextVideoButton.currentTime = 0;
 								videoElementInNextVideoButton
 									.play()
-									.catch((err) =>
+									.catch((err: unknown) => {
 										console.warn(
 											"Error start playing video: ",
 											err,
-										),
-									);
+										);
+									});
 							}
 						},
 						opacity: 1,
@@ -254,7 +254,7 @@ export const VideoBackground = ({
 				return (
 					<button
 						key={videoNumber}
-						id={`video-${videoNumber}`}
+						id={`video-${String(videoNumber)}`}
 						data-is-button={isButton}
 						ref={isButton ? videoButtonRef : null}
 						data-is-expanded={isExpanded}
@@ -267,7 +267,7 @@ export const VideoBackground = ({
 							autoPlay={isExpanded}
 							loop
 							onLoadedData={checkIsAllVideosLoaded}
-							src={`/videos/hero-${videoNumber}.mp4`}
+							src={`/videos/hero-${String(videoNumber)}.mp4`}
 							className="size-full object-cover object-center"
 						/>
 					</button>

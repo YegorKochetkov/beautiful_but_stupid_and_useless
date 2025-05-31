@@ -4,11 +4,11 @@ export function Story() {
 	return (
 		<section
 			id="story"
-			className=" min-h-dvh w-screen bg-bbsu-black-700 text-bbsu-blue-50"
+			className="min-h-dvh w-screen bg-bbsu-black-700 text-bbsu-blue-50"
 		>
 			<div className="flex size-full flex-col items-center py-10 pb-24">
-				<p className="text-sm uppercase md:text-base">
-				Minimal site accessibility is not a difficult...
+				<p className="text-base uppercase md:text-base">
+					Minimal site accessibility is not a difficult...
 				</p>
 				<div className="relative size-full">
 					<AnimatedText

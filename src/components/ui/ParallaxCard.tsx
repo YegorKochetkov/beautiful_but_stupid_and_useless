@@ -67,12 +67,10 @@ export const ParallaxCard = ({
 		);
 	};
 
-	const handleMouseMove = (
-		event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-	) => {
+	const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
 		if (!cardRef.current) return;
 
-		cardRef.current?.classList.remove("reset-position");
+		cardRef.current.classList.remove("reset-position");
 
 		const { clientX, clientY } = event;
 		const { left, top, width, height } =

@@ -12,8 +12,6 @@ export const useBackgroundTiltByGyroscope = (
 	setStyle: (rotation: Vec2, position: Vec2) => void,
 ) => {
 	React.useEffect(() => {
-		if (!window.DeviceOrientationEvent) return;
-
 		const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
 			if (event.beta === null || event.gamma === null) return;
 

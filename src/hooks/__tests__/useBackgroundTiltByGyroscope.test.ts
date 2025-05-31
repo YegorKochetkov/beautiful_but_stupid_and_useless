@@ -29,7 +29,7 @@ describe("useBackgroundTiltByGyroscope", () => {
 	it("should update position based on device orientation", () => {
 		const setStyle = vi.fn();
 
-		renderHook(() => useBackgroundTiltByGyroscope(setStyle));
+		renderHook(() => { useBackgroundTiltByGyroscope(setStyle) });
 
 		mockDeviceOrientationEvent(2, 5);
 
@@ -49,7 +49,7 @@ describe("useBackgroundTiltByGyroscope", () => {
 	it("should limit position shift to maxShift value", () => {
 		const setStyle = vi.fn();
 
-		renderHook(() => useBackgroundTiltByGyroscope(setStyle));
+		renderHook(() => { useBackgroundTiltByGyroscope(setStyle) });
 
 		// Simulate device orientation with values exceeding maxShift (6)
 		mockDeviceOrientationEvent(20, 15);
@@ -61,7 +61,7 @@ describe("useBackgroundTiltByGyroscope", () => {
 	it("should not update if beta or gamma is null", () => {
 		const setStyle = vi.fn();
 
-		renderHook(() => useBackgroundTiltByGyroscope(setStyle));
+		renderHook(() => { useBackgroundTiltByGyroscope(setStyle) });
 
 		const event = new Event("deviceorientation") as DeviceOrientationEvent;
 		Object.defineProperties(event, {
@@ -95,7 +95,7 @@ describe("useBackgroundTiltByGyroscope", () => {
 			() => mockAbortController,
 		) as unknown as typeof AbortController;
 
-		const { unmount } = renderHook(() => useBackgroundTiltByGyroscope(vi.fn()));
+		const { unmount } = renderHook(() => { useBackgroundTiltByGyroscope(vi.fn()) });
 
 		// Verify event listener was added with some signal
 		expect(addEventListenerSpy).toHaveBeenCalledWith(

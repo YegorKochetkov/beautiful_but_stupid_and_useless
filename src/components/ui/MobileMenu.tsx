@@ -39,7 +39,9 @@ export function MobileMenu() {
 		<div className="relative md:hidden">
 			<button
 				type="button"
-				onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+				onClick={() => {
+					setIsMobileMenuOpen(!isMobileMenuOpen);
+				}}
 				className="font-general text-base uppercase text-blue-50"
 			>
 				Menu

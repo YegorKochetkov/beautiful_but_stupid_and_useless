@@ -24,8 +24,12 @@ export function Navbar({ children }: { children: React.ReactNode }) {
 						scrolledFromTop && scrollStopped && !isNavbarHovered,
 				},
 			)}
-			onMouseEnter={() => setIsNavbarHovered(true)}
-			onMouseLeave={() => setIsNavbarHovered(false)}
+			onMouseEnter={() => {
+				setIsNavbarHovered(true);
+			}}
+			onMouseLeave={() => {
+				setIsNavbarHovered(false);
+			}}
 		>
 			<nav className="flex size-full items-center gap-4 px-4 lg:gap-8 [&>a]:mr-auto [&>a]:lg:mr-8">
 				{children}
