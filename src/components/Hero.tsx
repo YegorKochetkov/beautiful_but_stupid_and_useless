@@ -57,10 +57,9 @@ export function Hero() {
 	);
 }
 
-type HeroContentProps = React.HTMLAttributes<HTMLDivElement> & {
+interface HeroContentProps extends React.HTMLAttributes<HTMLDivElement> {
 	children: React.ReactNode;
-};
-
+}
 function HeroContent({ children, ...props }: HeroContentProps) {
 	return (
 		<div {...props}>

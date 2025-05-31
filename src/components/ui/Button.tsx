@@ -1,11 +1,10 @@
 import type React from "react";
 
-type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	children?: React.ReactNode;
 	leftIcon?: React.ReactNode;
 	rightIcon?: React.ReactNode;
-};
-
+}
 export const Button = ({
 	leftIcon,
 	children,
