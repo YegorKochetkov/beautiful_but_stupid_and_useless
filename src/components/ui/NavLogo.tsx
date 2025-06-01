@@ -1,6 +1,6 @@
 export function NavLogo() {
 	return (
-		<a href="/">
+		<a href="/" aria-label="Go to homepage">
 			<img
 				src="/img/logo.png"
 				alt="logo"
