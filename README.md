@@ -1,15 +1,15 @@
-# Красивый, но глупый и бесполезный сайт
+# Beautiful, but stupid and useless site
 
 In progress...
 
-**[Демо страница](https://beautiful-but-stupid-and-useless.vercel.app/)**
+**[Demo page](https://beautiful-but-stupid-and-useless.vercel.app/)**
 
-Успех проекта в полезном и функциональном продукте (услуге, сервисе и т.д), и не зависит от его красоты.
+The success of the project in a useful and functional product (service), and does not depend on its beauty.
 
-Подобные сайты нравятся заказчикам, нужны маркетологам и менеджерам, чтобы оправдать свою зарплату, но не нужны клиентам.
+Such websites are liked by customers, needed by marketers and managers to justify their salaries, but not needed by clients.
 
-Клиенту нужна функциональность и удобство, а не анимация.
+Clients need functionality and convenience, not animation.
 
-MacBook хорошо продается потому, что он удобен и функционален, но не потому, что на сайте есть красивая анимация.
+MacBook sells well because it is convenient and functional, not because the website has beautiful animation.
 
-К тому же, за всеми этими "красивостями" все забывают про пользователей с ограничениями. Лучше потратьте эти усилия на улучшение доступности (данный проект не учитывает пользователей с ограничениями - это требует усилий, за которые мне не заплатят).
+Moreover, amidst all these "beauties," everyone forgets about users with disabilities. It's better to spend these efforts on improving accessibility (this project does not account for users with disabilities - this requires effort for which I will not be paid)."
