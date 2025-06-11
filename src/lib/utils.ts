@@ -12,5 +12,7 @@ export function cn(...inputs: ClassValue[]) {
  * @returns The limited value
  */
 export const limitWithSign = (value: number, maxAbsValue: number): number => {
-	return Math.abs(value) > maxAbsValue ? maxAbsValue * Math.sign(value) : value;
+	return Math.abs(value) > maxAbsValue
+		? maxAbsValue * Math.sign(value)
+		: value;
 };
