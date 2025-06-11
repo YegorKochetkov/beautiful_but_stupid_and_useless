@@ -19,12 +19,14 @@ export const AnimatedText = ({
 	const wrapperRef = React.useRef<HTMLParagraphElement>(null);
 
 	useGSAP(() => {
+		if (!wrapperRef.current) return;
+
 		const tl = gsap.timeline({
 			scrollTrigger: {
 				trigger: wrapperRef.current,
-				start: "100 bottom",
-				end: "center bottom",
-				toggleActions: "play none none reverse",
+				start: "top bottom ",
+				end: "bottom 120",
+				toggleActions: "play reset play reset",
 			},
 		});
 
@@ -42,13 +44,19 @@ export const AnimatedText = ({
 		return () => {
 			tl.kill();
 		};
-	}, []);
+	}, [wrapperRef.current]);
 
 	return (
-		<p ref={wrapperRef} className={cn("flex flex-col gap-1", containerClass)}>
+		<p
+			ref={wrapperRef}
+			className={cn("flex flex-col gap-1", containerClass)}
+		>
 			{text.split("<br />").map((line, lineIndex) => (
-				// biome-ignore lint/suspicious/noArrayIndexKey: we`re not going to change the order of the elements in any way
-				<span key={lineIndex} className={cn("flex flex-wrap gap-1", textClass)}>
+				<span
+					// biome-ignore lint/suspicious/noArrayIndexKey: we`re not going to change the order of the elements in any way
+					key={lineIndex}
+					className={cn("flex flex-wrap gap-1", textClass)}
+				>
 					{line.split(" ").map((word, wordIndex) => (
 						<span
 							// biome-ignore lint/suspicious/noArrayIndexKey: we`re not going to change the order of the elements in any way
