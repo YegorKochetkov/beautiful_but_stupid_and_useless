@@ -50,22 +50,18 @@ body {
 	}
 
 	.text-shadow {
-		text-shadow: 0 0 0.15em #000, 0 0 0.15em #000, 0 0 0.15em #000, 0 0
-			0.15em #000;
+		text-shadow: 0 0 0.15em #000, 0 0 0.15em #000, 0 0 0.15em #000, 0 0 0.15em #000;
 	}
 	.svg-shadow {
-		-webkit-filter: drop-shadow(1px 1px 3px #000)
-			drop-shadow(-1px -1px 3px #000) drop-shadow(1px -1px 3px #000);
-		filter: drop-shadow(1px 1px 3px #000) drop-shadow(-1px -1px 3px #000)
-			drop-shadow(1px -1px 3px #000);
+		-webkit-filter: drop-shadow(1px 1px 3px #000) drop-shadow(-1px -1px 3px #000) drop-shadow(1px -1px 3px #000);
+		filter: drop-shadow(1px 1px 3px #000) drop-shadow(-1px -1px 3px #000) drop-shadow(1px -1px 3px #000);
 	}
 
 	.hover-3d-effect {
 		--glare-opacity: 0.3;
 		@apply [transform:rotateX(var(--x-rotation))_rotateY(var(--y-rotation))] after:pointer-events-none after:absolute after:inset-0 after:bg-[radial-gradient(at_var(--x)_var(--y),rgba(255,255,255)_10%,transparent_70%)] after:opacity-[var(--glare-opacity)] after:content-[""];
 		& video {
-			transform: scale(1.2)
-				translate3d(var(--x-position), var(--y-position), 0);
+			transform: scale(1.2) translate3d(var(--x-position), var(--y-position), 0);
 		}
 	}
 }
@@ -84,8 +80,7 @@ body {
 
 	.animated-word {
 		@apply opacity-0;
-		transform: translate3d(10px, 50px, -60px) rotateY(-60deg)
-			rotateX(-40deg);
+		transform: translate3d(10px, 50px, -60px) rotateY(-60deg) rotateX(-40deg);
 		transform-origin: 50% 50% -130px;
 		will-change: opacity, transform;
 	}
@@ -123,8 +118,7 @@ body {
 		font-weight: bold;
 		font-family: monospace;
 		font-size: 2rem;
-		background: radial-gradient(circle closest-side, #000 94%, #0000) right
-			/ calc(200% - 1.5em) 100%;
+		background: radial-gradient(circle closest-side, #000 94%, #0000) right / calc(200% - 1.5em) 100%;
 		animation: main-loader 1.3s infinite alternate linear;
 	}
 	.loader::before {
@@ -185,12 +179,10 @@ body {
 		--slide-transition-easing: ease;
 
 		position: relative;
-		transition: transform var(--slide-transition-duration)
-			var(--slide-transition-easing);
+		transition: transform var(--slide-transition-duration) var(--slide-transition-easing);
 
 		&:hover {
-			transition: transform var(--slide-transition-duration)
-				var(--slide-transition-easing);
+			transition: transform var(--slide-transition-duration) var(--slide-transition-easing);
 		}
 
 		&.reset-position {
@@ -198,8 +190,7 @@ body {
 			.video,
 			.card-info-wrapper,
 			.card-info-inner-wrapper {
-				transition: transform var(--slide-transition-duration)
-					var(--slide-transition-easing);
+				transition: transform var(--slide-transition-duration) var(--slide-transition-easing);
 			}
 		}
 
@@ -249,8 +240,7 @@ body {
 			top: 50%;
 			left: 50%;
 			object-fit: cover;
-			transform: translate(-50%, -50%) scale(1.25)
-				translate3d(var(--bgPosX), var(--bgPosY), 0);
+			transform: translate(-50%, -50%) scale(1.25) translate3d(var(--bgPosX), var(--bgPosY), 0);
 		}
 
 		/* ------------ CARD INFO ---------------- */
@@ -277,8 +267,7 @@ body {
 		.card-info-text-wrapper {
 			@apply z-10 flex h-full flex-col justify-between;
 
-			transition: var(--slide-transition-duration)
-				var(--slide-transition-easing);
+			transition: var(--slide-transition-duration) var(--slide-transition-easing);
 			transition-property: transform;
 		}
 
@@ -293,5 +282,49 @@ body {
 		.card-info-description {
 			@apply text-shadow mt-5 text-lg text-bbsu-blue-50 md:max-w-prose md:text-xl;
 		}
+	}
+
+	/* ------------ ANIMATED BLOBS ---------------- */
+
+	@keyframes blob-beam {
+		0% {
+			transform: translate(0, 0) scale(1);
+		}
+		33% {
+			transform: translate(30px, -50px) scale(1.1);
+		}
+		66% {
+			transform: translate(-20px, 20px) scale(0.9);
+		}
+		100% {
+			transform: translate(0, 0) scale(1);
+		}
+	}
+
+	@keyframes blob-pulse {
+		0% {
+			transform: scale(1);
+		}
+		50% {
+			transform: scale(1.05);
+		}
+		100% {
+			transform: scale(1);
+		}
+	}
+
+	.animate-blob-1 {
+		animation: blob-beam 15s infinite alternate, blob-pulse 5s infinite ease-in-out;
+		animation-delay: 0s, 0.5s;
+	}
+
+	.animate-blob-2 {
+		animation: blob-beam 18s infinite alternate, blob-pulse 6s infinite ease-in-out;
+		animation-delay: 2s, 1s;
+	}
+
+	.animate-blob-3 {
+		animation: blob-beam 12s infinite alternate, blob-pulse 4s infinite ease-in-out;
+		animation-delay: 1s, 0s;
 	}
 }
