@@ -3,6 +3,7 @@ import { Features } from "./components/Features";
 import { Hero } from "./components/Hero";
 import { Navbar } from "./components/Navbar";
 import { Story } from "./components/Story";
+import { Footer } from "./components/Footer";
 import { AudioIndicator } from "./components/ui/AudioIndicator";
 import { Menu } from "./components/ui/Menu";
 import { MobileMenu } from "./components/ui/MobileMenu";
@@ -25,6 +26,7 @@ const App = () => {
 				<Features />
 				<Story />
 			</main>
+			<Footer />
 		</div>
 	);
 };
