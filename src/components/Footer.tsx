@@ -25,21 +25,15 @@ export function Footer() {
 						end: "bottom bottom",
 						toggleActions: "play none none reverse",
 					},
-				},
+				}
 			);
 		},
-		{ scope: footerRef },
+		{ scope: footerRef }
 	);
 
 	return (
-		<footer
-			ref={footerRef}
-			className="w-screen bg-bbsu-black-700 py-16 text-center text-bbsu-blue-50"
-		>
-			<p className="text-base md:text-lg">
-				© {new Date().getFullYear()} Beautiful But Stupid and Useless.
-				All rights reserved.
-			</p>
+		<footer ref={footerRef} className="w-full bg-bbsu-black-700 py-16 text-center text-bbsu-blue-50">
+			<p className="text-base md:text-lg">© {new Date().getFullYear()} Beautiful But Stupid and Useless. All rights reserved.</p>
 		</footer>
 	);
 }
